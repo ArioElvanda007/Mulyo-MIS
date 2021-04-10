@@ -99,7 +99,41 @@
 	                    <p>
 	                        Entry
 	                    </p>
+	                    <i class="fas fa-angle-left right"></i>
 	                </a>
+	                <ul class="nav nav-treeview">
+	                	<li class="nav-item">
+	                        <a href="<?= base_url('Entry/job') ?>" class="nav-link">
+	                            <p class="ml-30">RAP</p>
+	                        </a>
+	                    </li>
+	                    <li class="nav-item">
+	                        <a href="<?= base_url('Entry/job') ?>" class="nav-link">
+	                            <p class="ml-30">PD Pratender</p>
+	                        </a>
+	                    </li>
+	                </ul>
+				</li>
+				 <li class="nav-item">
+	                <a href="#" class="nav-link">
+	                    <i class="nav-icon fa fa-book"></i>
+	                    <p>
+	                        Report
+	                    </p>
+	                    <i class="fas fa-angle-left right"></i>
+	                </a>
+	                <ul class="nav nav-treeview">
+	                    <li class="nav-item">
+	                        <a href="<?= base_url('Report/job') ?>" class="nav-link">
+	                            <p class="ml-30">Query PD/PJ</p>
+	                        </a>
+	                    </li>
+	                     <li class="nav-item">
+	                        <a href="<?= base_url('Report/job') ?>" class="nav-link">
+	                            <p class="ml-30">Outstanding PD Pratender</p>
+	                        </a>
+	                    </li>
+	                </ul>
 				</li>
 	        </ul>
 	    </nav>

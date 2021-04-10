@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?= $title ?> - MIS</title>
+        <title><?= $title ?> - MIS Application</title>
         <link rel="stylesheet" href="<?= base_url('assets/plugins/fontawesome-free/css/all.min.css') ?>">
         <link rel="stylesheet" href="<?= base_url('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') ?>">
         <link rel="stylesheet" href="<?= base_url('assets/dist/css/adminlte.min.css') ?>">
