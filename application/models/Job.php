@@ -50,7 +50,23 @@ class Job extends CI_Model {
 			OR LOWER(StatusJob) LIKE '%$search%' 
 		")->row_object();
 	}
-
+	public function insertProposal($data) {
+		return $this->db->insert('Job', $data);
+	}
+	public function insertProposalTender($data) {
+		return $this->db->insert('PesertaTender', $data);
+	}
+	public function updateJob($data, $JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->update('Job', $data);
+	}
+	public function getTahapanTenderByJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->get('TahapanTender')->result_object();
+	}
+	public function insertTahapanTender($data) {
+		return $this->db->insert('TahapanTender', $data);
+	}
 }
 
 /* End of file Job.php */

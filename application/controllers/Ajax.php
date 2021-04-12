@@ -10,6 +10,20 @@ class Ajax extends MY_Controller {
 	public function getSubByInstansi($Id_Instansi) {
 		echo json_encode($this->instansi->getSubInstansi($Id_Instansi));
 	}
+	public function getInfoPasarById($InfoPasarId) {
+		echo json_encode($this->infoPasar->getInfoPasarById($InfoPasarId));
+	}
+	public function getTahapanTenderByJobNo($JobNo) {
+		$data = $this->job->getTahapanTenderByJobNo($JobNo);
+		foreach ($data as $row => $value) {
+			$data[$row]->DrTgl = $this->dateToPeriode($value->DrTgl);
+			$data[$row]->SpTgl = $this->dateToPeriode($value->SpTgl);
+		}
+		echo json_encode($data);
+	}
+	public function getTahapanTenderBySispeng($id_SisPeng) {
+		echo json_encode($this->tahapanTender->getTahapanTender($id_SisPeng));
+	}
 }
 
 /* End of file Ajax.php */

@@ -7,6 +7,66 @@ class MY_Controller extends CI_Controller {
 		'content' => 'content/dashboard',
 		'title' => 'AIS',
 	];
+	public $provinces = [
+		"Aceh",
+		"Sumatera Utara",
+		"Sumatera Barat",
+		"Riau",
+		"Kepulauan Riau",
+		"Jambi",
+		"Sumatera Selatan",
+		"Kepulauan Bangka Belitung",
+		"Bengkulu",
+		"Lampung",
+		"DKI Jakarta",
+		"Banten",
+		"Jawa Barat",
+		"Jawa Tengah",
+		"DI Yogyakarta",
+		"Jawa Timur",
+		"Bali",
+		"Nusa Tenggara Barat",
+		"Nusa Tenggara Timur",
+		"Kalimantan Barat",
+		"Kalimantan Tengah",
+		"Provinsi Kalimantan Selatan",
+		"Kalimantan Timur",
+		"Kalimantan Utara",
+		"Sulawesi Utara",
+		"Gorontalo",
+		"Sulawesi Tengah",
+		"Sulawesi Barat",
+		"Provinsi Sulawesi Selatan",
+		"Sulawesi Tenggara",
+		"Maluku",
+		"Maluku Utara",
+		"Papua Barat",
+		"Papua",
+	];
+	public $pesertaTender = [
+		"PT. MINARTA DUTAHUTAMA",
+		"PT. KARYA PRIMA MANDIRI PRATAMA",
+		"PT. KARYA DULUR SAROHA",
+		"PT. BAHANA KRIDA NUSANTARA",
+		"PT. BAWAKARAENG PURNAMA WIJAYA",
+		"PT. RELIS SAPINDO UTAMA",
+		"PT. ADHI KARYA",
+		"PT. WASKITA KARYA",
+		"PT. WIJAYA KARYA",
+		"PT. BRANTAS ABIPRAYA",
+		"PT. PEMBANGUNAN PERUMAHAN",
+		"PT. NINDYA KARYA",
+		"PT. HUTAMA KARYA",
+		"KELMAN INFRA PRATAMA",
+		"PT. WIJAYA KARYA SEMESTA",
+		"PT. MARI BANGUN NUSANTARA",
+		"PT. JAYA TEKNIK LESTARI",
+		"PT. SUMBER KARSA INDAH UTAMA",
+		"PT. PARTO ADI NUGROHO",
+		"PT. ANINDYA PUTRI PERTIWI",
+		"PT. TIRSA ARTA MANDIRI",
+		"CV. CAHAYA BRINGIN",
+	];
 
 	public function __construct() {
 		parent::__construct();
@@ -74,6 +134,23 @@ class MY_Controller extends CI_Controller {
 				break;
 		}
 		return $callback;
+	}
+
+	public function uploadImgConf($dir = null) {
+		$config['upload_path'] = './assets/files/'.$dir;
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		$config['max_size']  = '3000';
+		$config['overwrite']  = TRUE;
+		$config['encrypt_name']  = TRUE;
+		return $this->load->library('upload', $config);
+	}
+	public function uploadFileConf($dir = null) {
+		$config['upload_path'] = './assets/files/'.$dir;
+		$config['allowed_types'] = 'pdf';
+		$config['max_size']  = '10000';
+		$config['overwrite']  = TRUE;
+		$config['encrypt_name']  = TRUE;
+		return $this->load->library('upload', $config);
 	}
 
 }

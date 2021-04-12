@@ -7,6 +7,11 @@ class InfoPasar extends CI_Model {
 		$this->db->order_by('jobNo', 'DESC');
 		return $this->db->get('InfoPasar')->result_object();
 	}
+	public function getInfoPasar_SIMPLE() {
+		return $this->db->query("
+			SELECT InfoPasarId,jobNo From InfoPasar ORDER BY jobNo DESC
+		")->result_object();
+	}
 	public function getInfoPasarById($InfoPasarId) {
 		$this->db->where('InfoPasarId', $InfoPasarId);
 		return $this->db->get('InfoPasar')->row_object();	

@@ -75,6 +75,7 @@
         <script src="<?= base_url('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') ?>"></script>
         <script src="<?= base_url('assets/plugins/select2/js/select2.full.min.js') ?>"></script>
         <script src="<?= base_url('assets/plugins/numeral/numeral.js') ?>"></script>
+        <script src="<?= base_url('assets/myjs/blockui.js') ?>"></script>
         <script type="text/javascript">
             $(function() {
                 var title = '<?= $this->session->flashdata("title") ?>';
@@ -97,6 +98,21 @@
                 // SELECT2
                 $(".select2").select2();
             })
+            function setLoading(init = false) {
+                if (init) {
+                    $.blockUI({ css: { 
+                        border: 'none', 
+                        padding: '15px', 
+                        backgroundColor: '#000', 
+                        '-webkit-border-radius': '10px', 
+                        '-moz-border-radius': '10px', 
+                        opacity: .5, 
+                        color: '#fff' 
+                    } });
+                } else {
+                    $.unblockUI();
+                }
+            }
             function toDecimal(e) {
                 $(e).val(numeral($(e).val()).format('0,0'));
             }

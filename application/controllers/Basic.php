@@ -272,6 +272,7 @@ class Basic extends MY_Controller {
 	// PROPOSAL
 	public function proposal() {
 		$this->parseData['title'] = "Data Proposal";
+		$this->parseData['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
 		$this->parseData['content'] = "content/basic/proposal/list";
 		$this->load->view('Main', $this->parseData);
 	}
@@ -287,7 +288,7 @@ class Basic extends MY_Controller {
 		];
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
-		$order = (isset($columns[$this->input->post('order')[0]['column']]) ? $columns[$this->input->post('order')[0]['column']] : 'JobNo');
+		$order = (isset($columns[$this->input->post('order')[0]['column']]) ? $columns[$this->input->post('order')[0]['column']] : 'TimeEntry');
 		$dir = ($this->input->post('order')[0]['dir'] ? $this->input->post('order')[0]['dir'] : 'desc');
 		$totalData = $this->job->getAllCount()->count;
 		$totalFiltered = $totalData;
@@ -303,10 +304,10 @@ class Basic extends MY_Controller {
 			foreach ($posts as $post) {
 				// ACTIONS
 				$actions = '<a href="'.site_url('Basic/proposal_edit/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
-				$actions .= '<a title="Tahapan tender" href="'.site_url('Basic/proposal_tahapan/'.$post->JobNo) .'" class="btn btn-info"><i class="fa fa-cubes"></i></a>';
+				$actions .= '<button type="button" title="Tahapan tender" onclick="openTahapan(\''.$post->JobNo.'\')" class="btn btn-info"><i class="fa fa-cubes"></i></button>';
 				$actions .= '<a title="Hasil Pembukaan" href="'.site_url('Basic/proposal_pembukaan/'.$post->JobNo).'" class="btn btn-warning"><i class="fa fa-book"></i></a>';
-				$actions .= '<a title="Menang" href="'.site_url('Basic/proposal_menang/'.$post->JobNo).'" class="btn btn-success"><i class="fa fa-trophy"></i></a>';
-				$actions .= '<a title="Gagal" href="'.site_url('Basic/proposal_gagal/'.$post->JobNo).'" class="btn btn-danger"><i class="fa fa-times"></i></a>';
+				$actions .= '<button type="button" title="Menang" onclick="openWinner(\''.$post->JobNo.'\')" class="btn btn-success"><i class="fa fa-trophy"></i></button>';
+				$actions .= '<button type="button" title="Gagal" onclick="openFailure(\''.$post->JobNo.'\')" class="btn btn-danger"><i class="fa fa-times"></i></button>';
 				
 				// NESTED
 				$nestedData['JobNo'] = $post->JobNo;
@@ -328,10 +329,114 @@ class Basic extends MY_Controller {
 		echo json_encode($json_data);
 	}
 	public function proposal_add() {
-
+		if ($this->input->post()) {
+			$job = [
+				'JobNo' => $this->input->post('JobNo'),
+				'JobNm' => $this->input->post('JobNm'),
+				'TipeJob' => 'PROJECT',
+				'Lokasi' => $this->input->post('Lokasi'),
+				'Instansi' => $this->input->post('Instansi'),
+				'InfoPasarId' => $this->input->post('InfoPasarId'),
+				'Provinsi' => $this->input->post('Provinsi'),
+				'Deskripsi' => $this->input->post('LingkupPekerjaan'),
+				'KSO' => ($this->input->post('PesertaTender') == 'KSO' ? 1 : 0),
+				'SumberDana' => $this->input->post('SumberDana'),
+				'TipePekerjaan' => $this->input->post('TipePekerjaan'),
+				'TahunAnggaran' => $this->input->post('TahunAnggaran'),
+				'Peluang' => $this->input->post('Peluang'),
+				'HPS' => str_replace(',', '', $this->input->post('HPS')),
+				'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto')),
+				'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto')),
+				'SistemKontrak' => $this->input->post('SistemKontrak'),
+				'TglKontrak' => $this->input->post('RencanaTender'),
+				'StatusJob' => 'Proposal',
+				'SistemKontrak' => $this->input->post('SistemKontrak'),
+				'TimeEntry' => date('Y-m-d H:i:s'),
+				'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
+				'Company' => $this->session->userdata('MIS_LOGGED_CORP'),
+			];
+			if ($_FILES['Logo']['name']) {
+				$this->uploadImgConf('jobs');
+				if (!$this->upload->do_upload('Logo')){
+					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+					redirect($_SERVER['HTTP_REFERER']);
+				} else {
+					$job['Logo'] = $this->upload->data()['file_name'];
+				}
+			}
+			if ($_FILES['RAPfile']['name']) {
+				$this->uploadFileConf('jobs');
+				if (!$this->upload->do_upload('Logo')){
+					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+					redirect($_SERVER['HTTP_REFERER']);
+				} else {
+					$job['RAPfile'] = $this->upload->data()['file_name'];
+				}
+			}
+			$this->job->insertProposal($job);
+			for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
+				if ($this->input->post('leader'.$i)) {
+					$pesertaTender = [
+						'JobNo' => $this->input->post('JobNo'),
+						'Leader' => $this->input->post('leader'.$i),
+						'PorsiLeader' => $this->input->post('leaderPorsi'.$i),
+						'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto')),
+						'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto')),
+						'TimeEntry' => date('Y-m-d H:i:s'),
+						'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
+					];
+					for ($b=1; $b <= $this->input->post('totalMember'.$i); $b++) { 
+						if ($this->input->post('member-'.$i.'-'.$b)) {
+							$pesertaTender['Member'.$b] = $this->input->post('member-'.$i.'-'.$b);
+							$pesertaTender['PorsiMember'.$b] = $this->input->post('memberPorsi-'.$i.'-'.$b);
+						}
+					}
+					$this->job->insertProposalTender($pesertaTender);
+				}
+			}
+			$this->setMessage('Berhasil','success','Data proposal berhasil ditambahkan!');
+			redirect('Basic/proposal');
+		} else {
+			$this->parseData['infoPasar'] = $this->infoPasar->getInfoPasar_SIMPLE();
+			$this->parseData['pesertaTender'] = json_encode($this->pesertaTender);
+			$this->parseData['provinces'] = $this->provinces;
+			$this->parseData['title'] = "Tambah Proposal";
+			$this->parseData['content'] = "content/basic/proposal/add";
+			$this->load->view('Main', $this->parseData);
+		}
 	}
 	public function proposal_edit() {
 		
+	}
+	public function proposal_winner() {
+		if ($this->input->post()) {
+			$this->job->updateJob([
+				'StatusJob' => 'Pelaksanaan',
+				'Company' => $this->input->post('company')
+			], $this->input->post('JobNo'));
+		}
+		redirect('Basic/proposal');
+	}
+	public function proposal_failure() {
+		if ($this->input->post()) {
+			$this->job->updateJob([
+				'StatusJob' => 'Gagal',
+				'AlasanGugur' => $this->input->post('AlasanGugur'),
+				'CompanyId' => $this->input->post('PemenangLelang'),
+				'PenawaranPemenang' => str_replace(',', '', $this->input->post('PenawaranPemenang'))
+			], $this->input->post('JobNo'));
+		}
+		redirect('Basic/proposal');
+	}
+	public function addTahapanTender() {
+		if ($this->input->post()) {
+			$data = $this->input->post();
+			$data['TimeEntry'] = date('Y-m-d H:i:s');
+			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
+			$this->job->insertTahapanTender($data);
+			$this->setMessage('Berhasil','success','Data tahapan tender pada proposal berhasil ditambahkan!');
+		}
+		redirect('Basic/proposal');
 	}
 
 }
