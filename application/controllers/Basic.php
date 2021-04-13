@@ -303,9 +303,9 @@ class Basic extends MY_Controller {
 		if (!empty($posts)) {
 			foreach ($posts as $post) {
 				// ACTIONS
-				$actions = '<a href="'.site_url('Basic/proposal_edit/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
+				$actions = '<a title="Edit Proposal" href="'.site_url('Basic/proposal_edit/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
 				$actions .= '<button type="button" title="Tahapan tender" onclick="openTahapan(\''.$post->JobNo.'\')" class="btn btn-info"><i class="fa fa-cubes"></i></button>';
-				$actions .= '<a title="Hasil Pembukaan" href="'.site_url('Basic/proposal_pembukaan/'.$post->JobNo).'" class="btn btn-warning"><i class="fa fa-book"></i></a>';
+				$actions .= '<button type="button" title="Hasil Pembukaan" onclick="openPembukaan(\''.$post->JobNo.'\')" class="btn btn-warning"><i class="fa fa-book"></i></button>';
 				$actions .= '<button type="button" title="Menang" onclick="openWinner(\''.$post->JobNo.'\')" class="btn btn-success"><i class="fa fa-trophy"></i></button>';
 				$actions .= '<button type="button" title="Gagal" onclick="openFailure(\''.$post->JobNo.'\')" class="btn btn-danger"><i class="fa fa-times"></i></button>';
 				
@@ -444,6 +444,20 @@ class Basic extends MY_Controller {
 			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
 			$this->job->insertTahapanTender($data);
 			$this->setMessage('Berhasil','success','Data tahapan tender pada proposal berhasil ditambahkan!');
+		}
+		redirect('Basic/proposal');
+	}
+	public function proposal_pembukaan() {
+		if ($this->input->post()) {
+			$this->uploadFileConf('jobs');
+			if (!$this->upload->do_upload('HasilPembukaan')){
+				$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+			} else {
+				$this->job->updateJob([
+					'HasilPembukaan' => $this->upload->data()['file_name']
+				], $this->input->post('JobNo'));
+				$this->setMessage('Berhasil','success','Data pembukaan pada proposal berhasil disimpan!');
+			}
 		}
 		redirect('Basic/proposal');
 	}

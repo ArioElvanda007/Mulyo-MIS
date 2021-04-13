@@ -54,6 +54,9 @@ class Job extends CI_Model {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->get('Job')->row_object();
 	}
+	public function getPembukaanByJobNo($JobNo) {
+		return $this->db->query("SELECT HasilPembukaan FROM Job WHERE JobNo = '$JobNo'")->row_object();
+	}
 	public function insertProposal($data) {
 		return $this->db->insert('Job', $data);
 	}

@@ -1,3 +1,8 @@
+<style type="text/css">
+    table tbody tr td button {
+        margin-left: 5px;
+    }
+</style>
 <section class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
@@ -162,6 +167,33 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="pembukaan">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Informasi Hasil Pembukaan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="url-pembukaan" style="text-align: center;"></div>
+                <form action="<?= site_url('Basic/proposal_pembukaan') ?>" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="JobNo" id="JobNo_pembukaan">
+                    <div class="form-group" id="form-pembukaan">
+                        <label>File Hasil Pembukaan (.pdf)</label>
+                        <input type="file" class="form-control" name="HasilPembukaan" required>
+                    </div>
+            </div>
+            <div class="modal-footer" id="footer-pembukaan">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Batal</button>
+                <button type="submit" onclick="return confirm('Apa anda yakin?')" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- END -->
 <script type="text/javascript">
     $(function() {
@@ -243,6 +275,27 @@
                     changeSistemPengadaan();
                 }
             })
+        }
+    }
+    function openPembukaan(JobNo = null) {
+        if (JobNo) {
+            $("#JobNo_pembukaan").val(JobNo);
+            setLoading(true);
+            $.ajax({
+                url: '<?= site_url("Ajax/getPembukaanByJobNo/") ?>'+JobNo,
+                type: 'GET',
+                success:function(res) {
+                    var data = $.parseJSON(res);
+                    if (data.HasilPembukaan) {
+                        var _html = '<a href="<?= base_url("assets/files/jobs/") ?>'+data.HasilPembukaan+'" target="_blank" class="btn btn-primary"><i class="fa fa-search"></i> Lihat File</a>';
+                        $("#url-pembukaan").html(_html);
+                        $("#form-pembukaan").hide();
+                        $("#footer-pembukaan").hide();
+                    }
+                    setLoading();
+                }
+            })
+            $("#pembukaan").modal('show');
         }
     }
     function changeSistemPengadaan() {

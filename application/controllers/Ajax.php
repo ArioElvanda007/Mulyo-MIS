@@ -24,6 +24,9 @@ class Ajax extends MY_Controller {
 	public function getTahapanTenderBySispeng($id_SisPeng) {
 		echo json_encode($this->tahapanTender->getTahapanTender($id_SisPeng));
 	}
+	public function getPembukaanByJobNo($JobNo) {
+		echo json_encode($this->job->getPembukaanByJobNo($JobNo));
+	}
 }
 
 /* End of file Ajax.php */
