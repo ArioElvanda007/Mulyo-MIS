@@ -284,7 +284,8 @@ class Basic extends MY_Controller {
 			3 => 'Instansi',
 			4 => 'HPS',
 			5 => 'StatusJob',
-			6 => 'actions',
+			6 => 'tahapanTender',
+			7 => 'actions',
 		];
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
@@ -310,12 +311,18 @@ class Basic extends MY_Controller {
 				$actions .= '<button type="button" title="Gagal" onclick="openFailure(\''.$post->JobNo.'\')" class="btn btn-danger"><i class="fa fa-times"></i></button>';
 				
 				// NESTED
+				$tahapanTender = '-';
+				$dataTahapan = $this->job->getTahapanTenderByJobNo_SINGLE($post->JobNo);
+				if ($dataTahapan) {
+					$tahapanTender = $dataTahapan->Tahap;
+				}
 				$nestedData['JobNo'] = $post->JobNo;
 				$nestedData['JobNm'] = $post->JobNm;
 				$nestedData['Provinsi'] = $post->Provinsi;
 				$nestedData['Instansi'] = $post->Instansi;
 				$nestedData['HPS'] = number_format($post->HPS);
 				$nestedData['StatusJob'] = $post->StatusJob;
+				$nestedData['TahapanTender'] = $tahapanTender;
 				$nestedData['actions'] = $actions;
 				$data[] = $nestedData;
 			}

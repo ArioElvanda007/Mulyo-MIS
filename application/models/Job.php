@@ -74,6 +74,11 @@ class Job extends CI_Model {
 	public function insertTahapanTender($data) {
 		return $this->db->insert('TahapanTender', $data);
 	}
+	public function getTahapanTenderByJobNo_SINGLE($JobNo) {
+		$this->db->order_by('TimeEntry', 'desc');
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->get('TahapanTender')->row_object();
+	}
 }
 
 /* End of file Job.php */

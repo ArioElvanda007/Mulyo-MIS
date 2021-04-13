@@ -31,6 +31,7 @@
 									<th>Instansi</th>
 									<th>HPS (Rp)</th>
 									<th>Status</th>
+                                    <th>Tahapan Tender</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
@@ -146,7 +147,7 @@
                             </div>
                         </div>
                     </div><!-- / ROW -->
-                    <button class="btn btn-primary" type="submit" onclick="return confirm('Apa anda yakin?')">Simpan</button>
+                    <button class="btn btn-primary" type="submit">Simpan</button>
                 </form>
                 <br />
                 <legend>List Tahapan Tender</legend>
@@ -158,6 +159,7 @@
                             <th>Nama Tahapan Tender</th>
                             <th>Dari Tanggal</th>
                             <th>Sampai Tanggal</th>
+                            <th>User Entry</th>
                         </tr>
                     </thead>
                     <tbody id="appendTahapanTenderList"></tbody>
@@ -188,7 +190,7 @@
             </div>
             <div class="modal-footer" id="footer-pembukaan">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Batal</button>
-                <button type="submit" onclick="return confirm('Apa anda yakin?')" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
             </div>
             </form>
         </div><!-- /.modal-content -->
@@ -229,14 +231,17 @@
                     "data": "StatusJob"
                 },
                 {
+                    "data": "TahapanTender"
+                },
+                {
                     "data": "actions"
                 }
             ],
             "columnDefs": [{
-                "targets": [6],
+                "targets": [6,7],
                 "orderable": false
             }, {
-            	width: '22%', targets: 6
+            	width: '22%', targets: 7
             }]
         });
     }
@@ -267,6 +272,7 @@
                             _html += '<td>'+v.Tahap+'</td>';
                             _html += '<td>'+v.DrTgl+'</td>';
                             _html += '<td>'+v.SpTgl+'</td>';
+                            _html += '<td>'+v.TimeEntry+'</td>';
                         _html += '</tr>';
                     });
                     $("#appendTahapanTenderList").html(_html);

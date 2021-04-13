@@ -20,6 +20,7 @@
 						<br /><br />
 						<form action="<?= site_url('Basic/proposal_add') ?>" method="POST" enctype="multipart/form-data">
 							<input type="hidden" name="JobNo" id="JobNo">
+							<input type="hidden" id="SDDN" value="">
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -73,8 +74,8 @@
 									<div class="form-group">
 										<label>Peserta Tender*</label>
 										<select class="form-control" name="PesertaTender" id="PesertaTender" onchange="changePesertaTender()">
-											<option value="Tunggal">Tunggal</option>
 											<option value="KSO">KSO</option>
+											<option value="Tunggal">Tunggal</option>
 										</select>
 									</div>
 								</div>
@@ -95,7 +96,10 @@
 									</div>
 									<div class="form-group">
 										<label>Sumber Dana</label>
-										<input type="text" class="form-control" name="SumberDana" id="SumberDana">
+										<select class="form-control" name="SumberDana">
+											<option value="APBN">APBN</option>
+											<option value="SBSN">SBSN</option>
+										</select>
 									</div>
 									<div class="form-group">
 										<label>Tipe Pekerjaan</label>
@@ -202,6 +206,7 @@
 					$("#HPS").val(numeral(data.HPS).format('0,0'));
 					$("#SistemKontrak").val(data.SistemKontrak);
 					$("#TahunAnggaran").val(data.TahunAnggaran);
+					$("#SDDN").val(data.SDDN);
 				}
 				setLoading();
 			}
@@ -228,13 +233,13 @@
 				_html += '<div class="col-sm-6">';
 					_html += '<div class="form-group">';
 						_html += '<label>Penawaran Bruto (Rp)</label>';
-						_html += '<input type="text" class="form-control" name="PenawaranBruto'+totalTender+'" onkeyup="toDecimal(this)" value="0">';
+						_html += '<input type="text" class="form-control" name="PenawaranBruto'+totalTender+'" onkeyup="bruto(this,\''+totalTender+'\')" value="0">';
 					_html += '</div>';
 				_html += '</div>';
 				_html += '<div class="col-sm-6">';
 					_html += '<div class="form-group">';
 						_html += '<label>Penawaran Exclude PPN</label>';
-						_html += '<input type="text" class="form-control" name="PenawaranNetto'+totalTender+'" onkeyup="toDecimal(this)" value="0">';
+						_html += '<input type="text" class="form-control" name="PenawaranNetto'+totalTender+'" id="PenawaranNetto'+totalTender+'" onkeyup="toDecimal(this)" value="0">';
 					_html += '</div>';
 				_html += '</div>';
 				_html += '<div class="col-sm-6">';
@@ -250,7 +255,7 @@
 				_html += '<div class="col-sm-6">';
 					_html += '<div class="form-group">';
 						_html += '<label>Porsi (%)</label>';
-						_html += '<input type="number" class="form-control" name="leaderPorsi'+totalTender+'" id="leaderPorsi'+totalTender+'" value="0">';
+						_html += '<input type="number" class="form-control" name="leaderPorsi'+totalTender+'" id="leaderPorsi'+totalTender+'" placeholder="0" onkeyup="valPorsi(this,\''+totalTender+'\')">';
 					_html += '</div>';
 				_html += '</div>';
 			_html += '</div>';
@@ -304,7 +309,7 @@
 			_html += '<div class="col-sm-6">';
 				_html += '<div class="form-group">';
 					_html += '<label>Porsi (%)</label>';
-					_html += '<input type="number" class="form-control" name="memberPorsi-'+tenderIndex+'-'+totalMember+'" id="memberPorsi-'+tenderIndex+'-'+totalMember+'" value="0">';
+					_html += '<input type="number" class="form-control" name="memberPorsi-'+tenderIndex+'-'+totalMember+'" id="memberPorsi-'+tenderIndex+'-'+totalMember+'" placeholder="0" onkeyup="valPorsi(this,\''+tenderIndex+'\')">';
 				_html += '</div>';
 			_html += '</div>';
 		_html += '</div>';
@@ -331,5 +336,31 @@
 				$("#btnCloneMember"+tenderIndex).show();
 			}
 		}
+	}
+	function bruto(ev, tenderIndex = null) {
+		toDecimal(ev);
+		if ($("#SDDN").val() == 'LOAN') {
+			var bruto = $(ev).val();
+			bruto = parseInt(bruto.replace(/,/g, ''));
+			var netto = 0;
+			if (bruto > 0) {
+				netto = (bruto * 10 )/ 100;
+			}
+			$("#PenawaranNetto"+tenderIndex).val(numeral(netto).format('0,0'));
+		}
+	}
+	function valPorsi(ev, tenderIndex = null) {
+		var totalMember = parseInt($("#totalMember"+tenderIndex).val());
+		var totalPorsi = 0;
+		totalPorsi += parseInt($("#leaderPorsi"+tenderIndex).val());
+		for (var i = 1; i <= totalMember; i++) {
+			totalPorsi += parseInt($("#memberPorsi-"+tenderIndex+"-"+i).val());
+			if(totalPorsi > 100) {
+				alert('Porsi pada peserta ini sudah mencapai 100!');
+				$(ev).val('');
+				break;
+			}
+		}
+		console.log(totalPorsi);
 	}
 </script>

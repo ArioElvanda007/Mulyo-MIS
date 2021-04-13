@@ -18,6 +18,7 @@ class Ajax extends MY_Controller {
 		foreach ($data as $row => $value) {
 			$data[$row]->DrTgl = $this->dateToPeriode($value->DrTgl);
 			$data[$row]->SpTgl = $this->dateToPeriode($value->SpTgl);
+			$data[$row]->TimeEntry = $this->beautyDate($value->TimeEntry, true);
 		}
 		echo json_encode($data);
 	}

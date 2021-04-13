@@ -113,7 +113,7 @@
 										<div class="form-group">
 											<label>Sumber Dana Negara</label>
 											<select class="form-control" name="SDDN">
-												<?php foreach (['APBN','SBSN','LOAD'] as $row => $value): ?>
+												<?php foreach (['APBN','SBSN','LOAN'] as $row => $value): ?>
 													<option <?= ($value == $data->SDDN ? 'selected' : '') ?> value="<?= $value ?>"><?= $value ?></option>
 												<?php endforeach ?>
 											</select>
