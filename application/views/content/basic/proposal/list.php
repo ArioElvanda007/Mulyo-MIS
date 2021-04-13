@@ -119,7 +119,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= site_url('Basic/addTahapanTender') ?>" method="POST">
+                <form action="#" method="POST" id="formEntryTahapanTender">
                     <input type="hidden" name="JobNo" id="JobNo_tahapanTender" value="0">
                     <div class="row">
                         <div class="col-sm-6">
@@ -139,15 +139,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Dari Tanggal</label>
-                                <input type="date" class="form-control" name="DrTgl">
+                                <input type="date" class="form-control" name="DrTgl" id="DrTgl">
                             </div>
                             <div class="form-group">
                                 <label>Sampai Tanggal</label>
-                                <input type="date" class="form-control" name="SpTgl">
+                                <input type="date" class="form-control" name="SpTgl" id="SpTgl">
                             </div>
                         </div>
                     </div><!-- / ROW -->
-                    <button class="btn btn-primary" type="submit">Simpan</button>
+                    <button class="btn btn-primary" type="button" onclick="saveTahapan(this)">Simpan</button>
                 </form>
                 <br />
                 <legend>List Tahapan Tender</legend>
@@ -257,7 +257,7 @@
             $("#JobNo_failure").val(JobNo);
         }
     }
-    function openTahapan(JobNo = null) {
+    function openTahapan(JobNo = null, openModal = true) {
         if (JobNo) {
             $("#JobNo_tahapanTender").val(JobNo);
             setLoading(true);
@@ -277,8 +277,10 @@
                     });
                     $("#appendTahapanTenderList").html(_html);
                     setLoading();
-                    $("#tahapanTender").modal('show');
-                    changeSistemPengadaan();
+                    if (openModal) {
+                        $("#tahapanTender").modal('show');
+                        changeSistemPengadaan();
+                    }
                 }
             })
         }
@@ -317,6 +319,23 @@
                 })
                 $("#Tahap").html(_html);
                 $("#labelTahapanTender").html('Nama Tahapan Tender');
+            }
+        })
+    }
+    function saveTahapan(ev) {
+        var data = $("#formEntryTahapanTender").serializeArray();
+        $(ev).attr('disabled',true).html('Loading..');
+        $.ajax({
+            url: '<?= site_url("Ajax/addTahapanTender") ?>',
+            type: 'POST',
+            data: data,
+            success:function(res) {
+                if (res == 'success') {
+                    $("#SpTgl").val('');
+                    $("#DrTgl").val('');
+                    openTahapan($("#JobNo_tahapanTender").val(), false);
+                }
+                $(ev).attr('disabled',false).html('Simpan');
             }
         })
     }

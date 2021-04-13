@@ -28,6 +28,17 @@ class Ajax extends MY_Controller {
 	public function getPembukaanByJobNo($JobNo) {
 		echo json_encode($this->job->getPembukaanByJobNo($JobNo));
 	}
+	public function addTahapanTender() {
+		if ($this->input->post()) {
+			$data = $this->input->post();
+			$data['TimeEntry'] = date('Y-m-d H:i:s');
+			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
+			$this->job->insertTahapanTender($data);
+			echo "success";
+		} else {
+			echo "failure";
+		}
+	}
 }
 
 /* End of file Ajax.php */

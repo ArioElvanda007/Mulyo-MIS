@@ -444,16 +444,6 @@ class Basic extends MY_Controller {
 		}
 		redirect('Basic/proposal');
 	}
-	public function addTahapanTender() {
-		if ($this->input->post()) {
-			$data = $this->input->post();
-			$data['TimeEntry'] = date('Y-m-d H:i:s');
-			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
-			$this->job->insertTahapanTender($data);
-			$this->setMessage('Berhasil','success','Data tahapan tender pada proposal berhasil ditambahkan!');
-		}
-		redirect('Basic/proposal');
-	}
 	public function proposal_pembukaan() {
 		if ($this->input->post()) {
 			$this->uploadFileConf('jobs');
