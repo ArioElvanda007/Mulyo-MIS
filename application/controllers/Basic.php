@@ -345,8 +345,6 @@ class Basic extends MY_Controller {
 				'TahunAnggaran' => $this->input->post('TahunAnggaran'),
 				'Peluang' => $this->input->post('Peluang'),
 				'HPS' => str_replace(',', '', $this->input->post('HPS')),
-				'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto')),
-				'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto')),
 				'SistemKontrak' => $this->input->post('SistemKontrak'),
 				'TglKontrak' => $this->input->post('RencanaTender'),
 				'StatusJob' => 'Proposal',
@@ -355,18 +353,13 @@ class Basic extends MY_Controller {
 				'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
 				'Company' => $this->session->userdata('MIS_LOGGED_CORP'),
 			];
-			if ($_FILES['Logo']['name']) {
-				$this->uploadImgConf('jobs');
-				if (!$this->upload->do_upload('Logo')){
-					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
-					redirect($_SERVER['HTTP_REFERER']);
-				} else {
-					$job['Logo'] = $this->upload->data()['file_name'];
-				}
-			}
 			if ($_FILES['RAPfile']['name']) {
-				$this->uploadFileConf('jobs');
-				if (!$this->upload->do_upload('Logo')){
+				if ($_FILES['RAPfile']['type'] != 'application/pdf') {
+					$this->setMessage('Ooppss','warning', 'RAP File harus menggunakan .pdf');
+					redirect($_SERVER['HTTP_REFERER']);
+				}
+				$this->uploadFileConf('jobs',true);
+				if (!$this->upload->do_upload('RAPfile')){
 					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
 					redirect($_SERVER['HTTP_REFERER']);
 				} else {
@@ -380,15 +373,25 @@ class Basic extends MY_Controller {
 						'JobNo' => $this->input->post('JobNo'),
 						'Leader' => $this->input->post('leader'.$i),
 						'PorsiLeader' => $this->input->post('leaderPorsi'.$i),
-						'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto')),
-						'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto')),
+						'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto'.$i)),
+						'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto'.$i)),
 						'TimeEntry' => date('Y-m-d H:i:s'),
 						'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
 					];
-					for ($b=1; $b <= $this->input->post('totalMember'.$i); $b++) { 
-						if ($this->input->post('member-'.$i.'-'.$b)) {
-							$pesertaTender['Member'.$b] = $this->input->post('member-'.$i.'-'.$b);
-							$pesertaTender['PorsiMember'.$b] = $this->input->post('memberPorsi-'.$i.'-'.$b);
+					if ($this->input->post('totalMember'.$i)) {
+						for ($b=1; $b <= $this->input->post('totalMember'.$i); $b++) { 
+							if ($this->input->post('member-'.$i.'-'.$b)) {
+								$pesertaTender['Member'.$b] = $this->input->post('member-'.$i.'-'.$b);
+								$pesertaTender['PorsiMember'.$b] = $this->input->post('memberPorsi-'.$i.'-'.$b);
+							}
+						}
+					}
+					if ($_FILES['tenderLogo'.$i]['name']) {
+						if (!$this->upload->do_upload('tenderLogo'.$i)){
+							$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+							redirect($_SERVER['HTTP_REFERER']);
+						} else {
+							$pesertaTender['logo'] = $this->upload->data()['file_name'];
 						}
 					}
 					$this->job->insertProposalTender($pesertaTender);

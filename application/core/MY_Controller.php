@@ -137,20 +137,24 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function uploadImgConf($dir = null) {
-		$config['upload_path'] = './assets/files/'.$dir;
-		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		$config['max_size']  = '3000';
-		$config['overwrite']  = TRUE;
-		$config['encrypt_name']  = TRUE;
-		return $this->load->library('upload', $config);
+		$configImg['upload_path'] = './assets/files/'.$dir;
+		$configImg['allowed_types'] = 'gif|jpg|png|jpeg';
+		$configImg['max_size']  = '3000';
+		$configImg['overwrite']  = TRUE;
+		$configImg['encrypt_name']  = TRUE;
+		return $this->load->library('upload', $configImg);
 	}
-	public function uploadFileConf($dir = null) {
-		$config['upload_path'] = './assets/files/'.$dir;
-		$config['allowed_types'] = 'pdf';
-		$config['max_size']  = '10000';
-		$config['overwrite']  = TRUE;
-		$config['encrypt_name']  = TRUE;
-		return $this->load->library('upload', $config);
+	public function uploadFileConf($dir = null, $specialCondition = false) {
+		$configFile['upload_path'] = './assets/files/'.$dir;
+		if ($specialCondition) {
+			$configFile['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+		} else {
+			$configFile['allowed_types'] = 'pdf';
+		}
+		$configFile['max_size']  = '10000';
+		$configFile['overwrite']  = TRUE;
+		$configFile['encrypt_name']  = TRUE;
+		return $this->load->library('upload', $configFile);
 	}
 
 }

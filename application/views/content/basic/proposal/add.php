@@ -72,7 +72,7 @@
 									</div>
 									<div class="form-group">
 										<label>Peserta Tender*</label>
-										<select class="form-control" name="PesertaTender">
+										<select class="form-control" name="PesertaTender" id="PesertaTender" onchange="changePesertaTender()">
 											<option value="Tunggal">Tunggal</option>
 											<option value="KSO">KSO</option>
 										</select>
@@ -128,15 +128,11 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="form-group">
-												<label>Penawaran Bruto (Rp)</label>
-												<input type="text" class="form-control" name="PenawaranBruto" onkeyup="toDecimal(this)" value="0">
+												<label>Rencana Tender</label>
+												<input type="date" class="form-control" name="RencanaTender">
 											</div>
 										</div>
 									</div><!-- / ROW -->
-									<div class="form-group">
-										<label>Rencana Tender</label>
-										<input type="date" class="form-control" name="RencanaTender">
-									</div>
 									<div class="row">
 										<div class="col-sm-6">
 											<div class="form-group">
@@ -149,19 +145,11 @@
 										</div>
 										<div class="col-sm-6">
 											<div class="form-group">
-												<label>Penawaran Exclude PPN</label>
-												<input type="text" class="form-control" name="PenawaranNetto" onkeyup="toDecimal(this)" value="0">
+												<label>Upload File PDF RAP</label>
+												<input type="file" class="form-control" name="RAPfile">
 											</div>
 										</div>
 									</div><!-- / ROW -->
-									<div class="form-group">
-										<label>Logo</label>
-										<input type="file" class="form-control" name="Logo">
-									</div>
-									<div class="form-group">
-										<label>Upload File PDF RAP</label>
-										<input type="file" class="form-control" name="RAPfile">
-									</div>
 								</div>
 							</div><!-- / ROW -->
 							<!-- MODAL SAVE -->
@@ -219,6 +207,11 @@
 			}
 		})
 	}
+	function changePesertaTender() {
+		$("#appendTender").empty();
+		$("#totalTender").val(0);
+		cloneTender();
+	}
 	function cloneTender() {
 		var totalTender = parseInt($("#totalTender").val());
 		++totalTender;
@@ -226,6 +219,24 @@
 		_html += '<div id="tender-group'+totalTender+'">';
 			_html += '<input type="hidden" name="totalMember'+totalTender+'" id="totalMember'+totalTender+'" value="0">';
 			_html += '<div class="row">';
+				_html += '<div class="col-sm-8 offset-2">';
+					_html += '<label>Logo</label>';
+					_html += '<div class="imagePreview">';
+						_html += '<input type="file" name="tenderLogo'+totalTender+'" class="upload" onchange="preview(this)">';
+					_html += '</div>';
+				_html += '</div>';
+				_html += '<div class="col-sm-6">';
+					_html += '<div class="form-group">';
+						_html += '<label>Penawaran Bruto (Rp)</label>';
+						_html += '<input type="text" class="form-control" name="PenawaranBruto'+totalTender+'" onkeyup="toDecimal(this)" value="0">';
+					_html += '</div>';
+				_html += '</div>';
+				_html += '<div class="col-sm-6">';
+					_html += '<div class="form-group">';
+						_html += '<label>Penawaran Exclude PPN</label>';
+						_html += '<input type="text" class="form-control" name="PenawaranNetto'+totalTender+'" onkeyup="toDecimal(this)" value="0">';
+					_html += '</div>';
+				_html += '</div>';
 				_html += '<div class="col-sm-6">';
 					_html += '<div class="form-group">';
 						_html += '<label>Leader '+totalTender+'</label>';
@@ -239,18 +250,22 @@
 				_html += '<div class="col-sm-6">';
 					_html += '<div class="form-group">';
 						_html += '<label>Porsi (%)</label>';
-						_html += '<input type="number" class="form-control" name="leaderPorsi'+totalTender+'" id="leaderPorsi'+totalTender+'">';
+						_html += '<input type="number" class="form-control" name="leaderPorsi'+totalTender+'" id="leaderPorsi'+totalTender+'" value="0">';
 					_html += '</div>';
 				_html += '</div>';
 			_html += '</div>';
-			_html += '<div id="appendTenderMember'+totalTender+'"></div>';
-			_html += '<button type="button" id="btnCloneMember'+totalTender+'" class="btn btn-primary" onclick="cloneMember(\''+totalTender+'\')"><i class="fa fa-plus"></i> Member</button>';
-			_html += '<button type="button" id="btnRemoveMember'+totalTender+'" class="btn btn-danger" style="margin-left:10px;display:none" onclick="removeMember(\''+totalTender+'\')"><i class="fa fa-trash"></i> Member</button>';
+			if ($("#PesertaTender").val() == 'KSO') {
+				_html += '<div id="appendTenderMember'+totalTender+'"></div>';
+				_html += '<button type="button" id="btnCloneMember'+totalTender+'" class="btn btn-primary" onclick="cloneMember(\''+totalTender+'\')"><i class="fa fa-plus"></i> Member</button>';
+				_html += '<button type="button" id="btnRemoveMember'+totalTender+'" class="btn btn-danger" style="margin-left:10px;display:none" onclick="removeMember(\''+totalTender+'\')"><i class="fa fa-trash"></i> Member</button>';
+			}
 			_html += '<hr />';
 		_html += '</div>';
 		$("#appendTender").append(_html);
 		$("#totalTender").val(totalTender);
-		cloneMember(totalTender);
+		if ($("#PesertaTender").val() == 'KSO') {
+			cloneMember(totalTender);
+		}
 		if (totalTender > 1) { 
 			$("#btnRemoveTender").show();
 		} else {
@@ -289,7 +304,7 @@
 			_html += '<div class="col-sm-6">';
 				_html += '<div class="form-group">';
 					_html += '<label>Porsi (%)</label>';
-					_html += '<input type="number" class="form-control" name="memberPorsi-'+tenderIndex+'-'+totalMember+'" id="memberPorsi-'+tenderIndex+'-'+totalMember+'">';
+					_html += '<input type="number" class="form-control" name="memberPorsi-'+tenderIndex+'-'+totalMember+'" id="memberPorsi-'+tenderIndex+'-'+totalMember+'" value="0">';
 				_html += '</div>';
 			_html += '</div>';
 		_html += '</div>';

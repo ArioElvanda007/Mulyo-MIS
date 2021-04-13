@@ -35,9 +35,44 @@
             input, select, textarea { border-radius: 0 !important; }
             .btn-warning { color: white !important; }
             legend { border-bottom: 1px solid black }
+            .imagePreview {
+                width: 100%;
+                height: 300px;
+                margin-top:10px;    
+                margin-right:50px;
+                background: url('<?= base_url('assets/images/camera.png') ?>');
+                background-position: center center;
+                background-size: cover;
+                box-shadow : 0px 1px 2px 0px black;
+                -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+                -moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+                display: inline-block;
+            }
+            .imagePreview input.upload {
+                position: absolute;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+                width: 100%;
+                height: 260px;
+            }
         </style>
         <script src="<?= base_url('assets/plugins/jquery/jquery.min.js') ?>"></script>
         <script src="<?= base_url('assets/plugins/jquery-ui/jquery-ui.min.js') ?>"></script>
+        <script type="text/javascript">
+            var preview = function(el) {
+                if (el.files && el.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $(el).parent().css({'background-image': 'url('+e.target.result+')','background-size':'cover','background-position': 'center center'});
+                    }
+                    reader.readAsDataURL(el.files[0]);
+                }
+            }
+        </script>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
