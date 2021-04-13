@@ -79,6 +79,14 @@ class Job extends CI_Model {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->get('TahapanTender')->row_object();
 	}
+	public function getMPPbyJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		$this->db->order_by('TimeEntry', 'DESC');
+		return $this->db->get('MPP')->result_object();
+	}
+	public function insertMPP($data) {
+		return $this->db->insert('MPP', $data);
+	}
 }
 
 /* End of file Job.php */

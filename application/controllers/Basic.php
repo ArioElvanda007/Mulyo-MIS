@@ -261,6 +261,7 @@ class Basic extends MY_Controller {
 				redirect('Basic/info_pasar');
 			}
 			$this->parseData['info_pasar'] = $info_pasar;
+			$this->parseData['posisi'] = $this->posisi;
 			$this->parseData['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
 			$this->parseData['data'] = $this->infoPasar->getMppByInfoPasar($InfoPasarId);
 			$this->parseData['title'] = "List Man Power Planning Pada Info Pasar: ".$info_pasar->NamaPaket;
@@ -272,6 +273,8 @@ class Basic extends MY_Controller {
 	// PROPOSAL
 	public function proposal() {
 		$this->parseData['title'] = "Data Proposal";
+		$this->parseData['posisi'] = $this->posisi;
+		$this->parseData['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
 		$this->parseData['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
 		$this->parseData['content'] = "content/basic/proposal/list";
 		$this->load->view('Main', $this->parseData);
@@ -307,6 +310,7 @@ class Basic extends MY_Controller {
 				$actions = '<a title="Edit Proposal" href="'.site_url('Basic/proposal_edit/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
 				$actions .= '<button type="button" title="Tahapan tender" onclick="openTahapan(\''.$post->JobNo.'\')" class="btn btn-info"><i class="fa fa-cubes"></i></button>';
 				$actions .= '<button type="button" title="Hasil Pembukaan" onclick="openPembukaan(\''.$post->JobNo.'\')" class="btn btn-warning"><i class="fa fa-book"></i></button>';
+				$actions .= '<button type="button" title="Man Power Planning" onclick="openMPP(\''.$post->JobNo.'\',\''.$post->JobNo.'\')" class="btn btn-primary"><i class="fa fa-users"></i></button>';
 				$actions .= '<button type="button" title="Menang" onclick="openWinner(\''.$post->JobNo.'\')" class="btn btn-success"><i class="fa fa-trophy"></i></button>';
 				$actions .= '<button type="button" title="Gagal" onclick="openFailure(\''.$post->JobNo.'\')" class="btn btn-danger"><i class="fa fa-times"></i></button>';
 				

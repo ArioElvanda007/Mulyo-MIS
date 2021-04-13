@@ -159,7 +159,7 @@
                             <th>Nama Tahapan Tender</th>
                             <th>Dari Tanggal</th>
                             <th>Sampai Tanggal</th>
-                            <th>User Entry</th>
+                            <th>Time Entry</th>
                         </tr>
                     </thead>
                     <tbody id="appendTahapanTenderList"></tbody>
@@ -193,6 +193,70 @@
                 <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
             </div>
             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="mpp">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Man Power Planning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST" id="formMPP">
+                    <input type="hidden" name="JobNo" id="JobNo_mpp">
+                    <input type="hidden" name="InfoPasarId" id="InfoPasarId_mpp">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Karyawan*</label>
+                                <select class="form-control select2" name="karyawan">
+                                    <?php foreach ($karyawan as $r => $v): ?>
+                                        <option value="<?= $v->NIK.'-'.$v->Nama ?>"><?= $v->NIK.' - '.$v->Nama ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Posisi*</label>
+                                <select class="form-control select2" name="Posisi">
+                                    <?php foreach ($posisi as $r => $v): ?>
+                                        <option value="<?= $v ?>"><?= $v ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Take Home Pay*</label>
+                                <input type="text" onkeyup="toDecimal(this)" class="form-control" required name="TakeHomePay" id="TakeHomePay">
+                            </div>
+                        </div>
+                    </div><!-- / ROW -->
+                    <button class="btn btn-primary" type="button" onclick="saveMPP(this)">Simpan</button>
+                </form>
+                <br />
+                <legend>List Man Power</legend>
+                <br />
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">No. Urut</th>
+                            <th>Nama Karyawan</th>
+                            <th>Posisi</th>
+                            <th>Take Home Pay (Rp)</th>
+                            <th>Time Entry</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appendMPPlist"></tbody>
+                </table>
+                <br />
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -241,7 +305,7 @@
                 "targets": [6,7],
                 "orderable": false
             }, {
-            	width: '22%', targets: 7
+            	width: '25%', targets: 7
             }]
         });
     }
@@ -306,6 +370,34 @@
             $("#pembukaan").modal('show');
         }
     }
+    function openMPP(JobNo = null, InfoPasarId = null, openModal = true) {
+        if (JobNo && InfoPasarId) {
+            $("#JobNo_mpp").val(JobNo);
+            $("#InfoPasarId_mpp").val(InfoPasarId);
+            setLoading(true)
+            $.ajax({
+                url: '<?= site_url("Ajax/getMPPbyJobNo/") ?>'+JobNo,
+                type: 'GET',
+                success:function(res) {
+                    var _html = '';
+                    $.each($.parseJSON(res),function(i,v) {
+                        _html += '<tr>';
+                            _html += '<td>'+(i + 1)+'</td>';
+                            _html += '<td>'+v.Nama+'</td>';
+                            _html += '<td>'+v.Posisi+'</td>';
+                            _html += '<td>'+v.TakeHomePay+'</td>';
+                            _html += '<td>'+v.TimeEntry+'</td>';
+                        _html += '</tr>';
+                    })
+                    $("#appendMPPlist").html(_html);
+                    setLoading();
+                    if (openModal) {
+                        $("#mpp").modal('show');
+                    }
+                }
+            });
+        }
+    }
     function changeSistemPengadaan() {
         var id_SisPeng = $("#sistemPengadaan").val();
         $("#labelTahapanTender").html('Loading..');
@@ -334,6 +426,22 @@
                     $("#SpTgl").val('');
                     $("#DrTgl").val('');
                     openTahapan($("#JobNo_tahapanTender").val(), false);
+                }
+                $(ev).attr('disabled',false).html('Simpan');
+            }
+        })
+    }
+    function saveMPP(ev) {
+        var data = $("#formMPP").serializeArray();
+        $(ev).attr('disabled',true).html('Loading..');
+        $.ajax({
+            url: '<?= site_url("Ajax/addMPP") ?>',
+            type: 'POST',
+            data: data,
+            success:function(res) {
+                if (res == 'success') {
+                    $("#TakeHomePay").val('');
+                    openMPP($("#JobNo_mpp").val(), $("#InfoPasarId_mpp").val(), false);
                 }
                 $(ev).attr('disabled',false).html('Simpan');
             }

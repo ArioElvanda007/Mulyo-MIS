@@ -39,6 +39,37 @@ class Ajax extends MY_Controller {
 			echo "failure";
 		}
 	}
+	public function getMPPbyJobNo($JobNo) {
+		$data = $this->job->getMPPbyJobNo($JobNo);
+		foreach ($data as $row => $value) {
+			$TakeHomePay = 0;
+			$arr = explode('.', $value->TakeHomePay);
+			if (isset($arr[0])) {
+				$TakeHomePay = $arr[0];
+			}
+			$data[$row]->TakeHomePay = number_format($TakeHomePay);
+		}
+		echo json_encode($data);
+	}
+	public function addMPP() {
+		if ($this->input->post()) {
+			$data = $this->input->post();
+			$karyawan = $this->input->post('karyawan');
+			unset($data['karyawan']);
+			$arr = explode('-', $karyawan);
+			if (isset($arr[0]) && isset($arr[1])) {
+				$data['NIK'] = $arr[0];
+				$data['Nama'] = $arr[1];
+			}
+			$data['TakeHomePay'] = str_replace(',', '', $data['TakeHomePay']);
+			$data['TimeEntry'] = date('Y-m-d H:i:s');
+			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
+			$this->job->insertMPP($data);
+			echo "success";
+		} else {
+			echo "failure";
+		}
+	}
 }
 
 /* End of file Ajax.php */
