@@ -50,6 +50,10 @@ class Job extends CI_Model {
 			OR LOWER(StatusJob) LIKE '%$search%' 
 		")->row_object();
 	}
+	public function getJobByJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->get('Job')->row_object();
+	}
 	public function insertProposal($data) {
 		return $this->db->insert('Job', $data);
 	}

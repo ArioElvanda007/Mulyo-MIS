@@ -26,7 +26,7 @@
 										<label>Job No.</label>
 										<select class="form-control" name="InfoPasarId" id="InfoPasarId" onchange="changeJobNo()">
 											<?php foreach ($infoPasar as $row => $value): ?>
-												<?php if ($value->jonNo != '0'): ?>
+												<?php if ($value->jobNo != '0'): ?>
 													<option value="<?= $value->InfoPasarId ?>"><?= $value->jobNo ?></option>
 												<?php endif ?>
 											<?php endforeach ?>

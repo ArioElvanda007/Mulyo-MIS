@@ -330,6 +330,12 @@ class Basic extends MY_Controller {
 	}
 	public function proposal_add() {
 		if ($this->input->post()) {
+			// CHECK AVAILABLE JOBNO
+			if ($this->job->getJobByJobNo($this->input->post('JobNo'))) {
+				$this->setMessage('Ooppss','warning', 'Job No sudah terdaftar, silahkan coba job lain');
+				redirect('Basic/proposal_add');
+			}
+			// END
 			$job = [
 				'JobNo' => $this->input->post('JobNo'),
 				'JobNm' => $this->input->post('JobNm'),
