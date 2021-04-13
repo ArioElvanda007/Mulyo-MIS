@@ -463,6 +463,59 @@ class Basic extends MY_Controller {
 		redirect('Basic/proposal');
 	}
 
+	// JOB
+	public function job() {
+		$this->parseData['title'] = "Data Job";
+		$this->parseData['content'] = "content/basic/job/list";
+		$this->load->view('Main', $this->parseData);
+	}
+	public function listJob() {
+		$columns = [
+			0 => 'JobNo',
+			1 => 'JobNm',
+			2 => 'Deskripsi',
+			3 => 'Kontraktor',
+			5 => 'StatusJob',
+			6 => 'Kategori',
+			7 => 'actions',
+		];
+		$limit = $this->input->post('length');
+		$start = $this->input->post('start');
+		$order = (isset($columns[$this->input->post('order')[0]['column']]) ? $columns[$this->input->post('order')[0]['column']] : 'TimeEntry');
+		$dir = ($this->input->post('order')[0]['dir'] ? $this->input->post('order')[0]['dir'] : 'desc');
+		$totalData = $this->job->getAllCount()->count;
+		$totalFiltered = $totalData;
+		if (empty($this->input->post('search')['value'])) {
+			$posts = $this->job->getAllData($limit, $start, $order, $dir);
+		} else {
+			$search = $this->input->post('search')['value'];
+			$posts =  $this->job->getAllData_search($limit, $start, $search, $order, $dir);
+			$totalFiltered = $this->job->getAllCount_search($search)->count;
+		}
+		$data = array();
+		if (!empty($posts)) {
+			foreach ($posts as $post) {
+				// ACTIONS
+				$actions = '<a title="Open Job Form" href="'.site_url('Basic/job_form/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
+				// NESTED
+				$nestedData['JobNo'] = $post->JobNo;
+				$nestedData['JobNm'] = $post->JobNm;
+				$nestedData['Deskripsi'] = $post->Deskripsi;
+				$nestedData['Kontraktor'] = '';
+				$nestedData['StatusJob'] = $post->StatusJob;
+				$nestedData['Kategori'] = $post->Kategori;
+				$nestedData['actions'] = $actions;
+				$data[] = $nestedData;
+			}
+		}
+		$json_data = [
+			"sEcho"            => intval($this->input->post('draw')),
+			"iTotalRecords"    => intval($totalData),
+			"iTotalDisplayRecords" => intval($totalFiltered),
+			"aaData"            => $data
+		];
+		echo json_encode($json_data);
+	}
 }
 
 /* End of file Basic.php */

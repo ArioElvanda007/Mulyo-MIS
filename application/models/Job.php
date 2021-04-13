@@ -15,7 +15,7 @@ class Job extends CI_Model {
 	}
 	public function getAllData($limit, $start, $order, $dir) {
 		return $this->db->query("
-			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob 
+			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob,Deskripsi,Kategori
 			FROM Job 
 			ORDER BY $order $dir 
             OFFSET $start ROWS 
@@ -25,7 +25,7 @@ class Job extends CI_Model {
 	public function getAllData_search($limit, $start, $search, $order, $dir) {
 		$search = strtolower($search);
 		return $this->db->query("
-			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob 
+			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob,Deskripsi,Kategori 
 			FROM Job 
 			WHERE LOWER(JobNo) LIKE '%$search%' 
 			OR LOWER(JobNm) LIKE '%$search%' 
