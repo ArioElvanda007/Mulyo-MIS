@@ -63,6 +63,14 @@ class Job extends CI_Model {
 	public function insertProposalTender($data) {
 		return $this->db->insert('PesertaTender', $data);
 	}
+	public function updateProposalTender($data, $IdPeserta) {
+		$this->db->where('IdPeserta', $IdPeserta);
+		return $this->db->update('PesertaTender', $data);
+	}
+	public function deleteProposalTenderByJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->delete('PesertaTender');
+	}
 	public function updateJob($data, $JobNo) {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->update('Job', $data);
@@ -78,6 +86,15 @@ class Job extends CI_Model {
 		$this->db->order_by('TimeEntry', 'desc');
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->get('TahapanTender')->row_object();
+	}
+	public function getPesertaTenderByJobNo_SINGLE_ARR($JobNo) {
+		$this->db->order_by('TimeEntry', 'desc');
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->get('PesertaTender')->row_array();
+	}
+	public function getPesertaTenderByJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->get('PesertaTender')->result_object();
 	}
 	public function getMPPbyJobNo($JobNo) {
 		$this->db->where('JobNo', $JobNo);

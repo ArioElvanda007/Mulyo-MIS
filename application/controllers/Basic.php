@@ -370,17 +370,17 @@ class Basic extends MY_Controller {
 				'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
 				'Company' => $this->session->userdata('MIS_LOGGED_CORP'),
 			];
+			$this->uploadFileConf('jobs',true);
 			if ($_FILES['RAPfile']['name']) {
 				if ($_FILES['RAPfile']['type'] != 'application/pdf') {
 					$this->setMessage('Ooppss','warning', 'RAP File harus menggunakan .pdf');
 					redirect($_SERVER['HTTP_REFERER']);
 				}
-				$this->uploadFileConf('jobs',true);
 				if (!$this->upload->do_upload('RAPfile')){
 					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
 					redirect($_SERVER['HTTP_REFERER']);
 				} else {
-					$job['RAPfile'] = $this->upload->data()['file_name'];
+					$job['RAPFile'] = $this->upload->data()['file_name'];
 				}
 			}
 			$this->job->insertProposal($job);
@@ -425,8 +425,101 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
-	public function proposal_edit() {
-		
+	public function proposal_edit($JobNo = null) {
+		if ($this->input->post()) {
+			$job = [
+				'JobNm' => $this->input->post('JobNm'),
+				'TipeJob' => 'PROJECT',
+				'Lokasi' => $this->input->post('Lokasi'),
+				'Instansi' => $this->input->post('Instansi'),
+				'InfoPasarId' => $this->input->post('InfoPasarId'),
+				'Provinsi' => $this->input->post('Provinsi'),
+				'Deskripsi' => $this->input->post('LingkupPekerjaan'),
+				'KSO' => ($this->input->post('PesertaTender') == 'KSO' ? 1 : 0),
+				'SumberDana' => $this->input->post('SumberDana'),
+				'TipePekerjaan' => $this->input->post('TipePekerjaan'),
+				'TahunAnggaran' => $this->input->post('TahunAnggaran'),
+				'Peluang' => $this->input->post('Peluang'),
+				'HPS' => str_replace(',', '', $this->input->post('HPS')),
+				'SistemKontrak' => $this->input->post('SistemKontrak'),
+				'TglKontrak' => $this->input->post('RencanaTender'),
+				'StatusJob' => 'Proposal',
+				'SistemKontrak' => $this->input->post('SistemKontrak'),
+			];
+			$this->uploadFileConf('jobs',true);
+			if ($_FILES['RAPfile']['name']) {
+				if ($_FILES['RAPfile']['type'] != 'application/pdf') {
+					$this->setMessage('Ooppss','warning', 'RAP File harus menggunakan .pdf');
+					redirect($_SERVER['HTTP_REFERER']);
+				}
+				if (!$this->upload->do_upload('RAPfile')){
+					$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+					redirect($_SERVER['HTTP_REFERER']);
+				} else {
+					$job['RAPFile'] = $this->upload->data()['file_name'];
+				}
+			}
+			$this->job->updateJob($job, $this->input->post('JobNo'));
+			$this->job->deleteProposalTenderByJobNo($this->input->post('JobNo'));
+			for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
+				if ($this->input->post('leader'.$i)) {
+					$pesertaTender = [
+						'JobNo' => $this->input->post('JobNo'),
+						'Leader' => $this->input->post('leader'.$i),
+						'PorsiLeader' => $this->input->post('leaderPorsi'.$i),
+						'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto'.$i)),
+						'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto'.$i)),
+						'TimeEntry' => date('Y-m-d H:i:s'),
+						'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
+					];
+					if ($this->input->post('totalMember'.$i)) {
+						for ($b=1; $b <= $this->input->post('totalMember'.$i); $b++) { 
+							if ($this->input->post('member-'.$i.'-'.$b)) {
+								$pesertaTender['Member'.$b] = $this->input->post('member-'.$i.'-'.$b);
+								$pesertaTender['PorsiMember'.$b] = $this->input->post('memberPorsi-'.$i.'-'.$b);
+							}
+						}
+					}
+					if ($_FILES['tenderLogo'.$i]['name']) {
+						if (!$this->upload->do_upload('tenderLogo'.$i)){
+							$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+							redirect($_SERVER['HTTP_REFERER']);
+						} else {
+							$pesertaTender['logo'] = $this->upload->data()['file_name'];
+						}
+					} else {
+						$pesertaTender['logo'] = $this->input->post('logo'.$i);
+					}
+					$this->job->insertProposalTender($pesertaTender);
+				}
+			}
+			$this->setMessage('Berhasil','success','Data proposal berhasil diubah!');
+			redirect('Basic/proposal');
+		} else {
+			$data = $this->job->getJobByJobNo($JobNo);
+			if (!$data) {
+				redirect('Basic/proposal');
+			}
+			$peserta = $this->job->getPesertaTenderByJobNo($JobNo);
+			foreach ($peserta as $row => $value) {
+				$peserta[$row]->PenawaranBruto = $this->removeDecimal($value->PenawaranBruto);
+				$peserta[$row]->PenawaranNetto = $this->removeDecimal($value->PenawaranNetto);
+				$peserta[$row]->PorsiLeader = $this->removeDecimal($value->PorsiLeader);
+				$peserta[$row]->PorsiMember1 = $this->removeDecimal($value->PorsiMember1);
+				$peserta[$row]->PorsiMember2 = $this->removeDecimal($value->PorsiMember2);
+				$peserta[$row]->PorsiMember3 = $this->removeDecimal($value->PorsiMember3);
+				$peserta[$row]->PorsiMember4 = $this->removeDecimal($value->PorsiMember4);
+				$peserta[$row]->PorsiMember5 = $this->removeDecimal($value->PorsiMember5);
+			}
+			$data->peserta = $peserta;
+			$this->parseData['data'] = $data;
+			$this->parseData['infoPasar'] = $this->infoPasar->getInfoPasar_SIMPLE();
+			$this->parseData['pesertaTender'] = json_encode($this->pesertaTender);
+			$this->parseData['provinces'] = $this->provinces;
+			$this->parseData['title'] = "Ubah Proposal";
+			$this->parseData['content'] = "content/basic/proposal/edit";
+			$this->load->view('Main', $this->parseData);
+		}
 	}
 	public function proposal_winner() {
 		if ($this->input->post()) {
@@ -498,10 +591,20 @@ class Basic extends MY_Controller {
 				// ACTIONS
 				$actions = '<a title="Open Job Form" href="'.site_url('Basic/job_form/'.$post->JobNo).'" class="btn btn-primary"><i class="fa fa-edit"></i></a>';
 				// NESTED
+				$kontraktor = '-';
+				$dataPeserta = $this->job->getPesertaTenderByJobNo_SINGLE_ARR($post->JobNo);
+				if ($dataPeserta) {
+					$kontraktor = '(L)'.$dataPeserta['Leader'];
+					foreach (range(1,5) as $r => $v) {
+						if ($dataPeserta['Member'.$v]) {
+							$kontraktor .= ' - '.$dataPeserta['Member'.$v];
+						}
+					}
+				}
 				$nestedData['JobNo'] = $post->JobNo;
 				$nestedData['JobNm'] = $post->JobNm;
 				$nestedData['Deskripsi'] = $post->Deskripsi;
-				$nestedData['Kontraktor'] = '';
+				$nestedData['Kontraktor'] = $kontraktor;
 				$nestedData['StatusJob'] = $post->StatusJob;
 				$nestedData['Kategori'] = $post->Kategori;
 				$nestedData['actions'] = $actions;

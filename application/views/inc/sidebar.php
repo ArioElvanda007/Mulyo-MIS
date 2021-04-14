@@ -87,7 +87,13 @@
 	                        </a>
 	                    </li>
 	                    <li class="nav-item">
-	                        <a href="<?= base_url('Basic/job') ?>" class="nav-link">
+	                    	<?php
+	                    		$menuJob = false;
+	                    		if (strtolower($this->uri->segment(2)) == 'job' || strtolower($this->uri->segment(2)) == 'job_form') {
+	                    			$menuJob = true;
+	                    		}
+	                    	?>
+	                        <a href="<?= base_url('Basic/job') ?>" class="nav-link <?= ($menuJob ? 'active' : '') ?>">
 	                            <p class="ml-30">Job</p>
 	                        </a>
 	                    </li>

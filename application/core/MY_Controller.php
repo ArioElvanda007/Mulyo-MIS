@@ -207,7 +207,14 @@ class MY_Controller extends CI_Controller {
 		$configFile['encrypt_name']  = TRUE;
 		return $this->load->library('upload', $configFile);
 	}
-
+	public function removeDecimal($value) {
+		$arr = explode('.', $value);
+		$callback = 0;
+		if (isset($arr[0])) {
+			$callback = $arr[0];
+		}
+		return $callback;
+	}
 }
 
 /* End of file MY_Controller.php */
