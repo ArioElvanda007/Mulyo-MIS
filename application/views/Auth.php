@@ -28,7 +28,7 @@
 					</div>
 				<?php endif ?>
 				<p class="login-box-msg">Silahkan pilih perusahaan</p>
-				<div class="row" id="corp-box">
+				<div class="row" id="corp-box" style="display: none;">
 					<?php
 						foreach (['AMK','KGS','KIB','KIP','KSB','KSC','MDH','REN'] as $row => $value): 
 					?>
@@ -37,8 +37,8 @@
 					</div>
 					<?php endforeach ?>
 				</div>
-				<form action="<?= base_url('Auth') ?>" method="post" style="display: none;">
-					<input type="hidden" name="corp" id="corp" value="">
+				<form action="<?= base_url('Auth') ?>" method="post">
+					<input type="hidden" name="corp" id="corp" value="PRA">
 					<div class="input-group mb-3">
 						<input type="text" class="form-control" name="username" placeholder="Username">
 						<div class="input-group-append">
