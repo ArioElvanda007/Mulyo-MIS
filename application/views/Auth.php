@@ -27,10 +27,12 @@
 						<?= $this->session->flashdata('login_error'); ?>
 					</div>
 				<?php endif ?>
-				<p class="login-box-msg">Silahkan pilih perusahaan</p>
+				<p class="login-box-msg">Welcome To This Company</p>
 				<div class="row" id="corp-box">
 					<?php
-						foreach (['AMK','KGS','KIB','KIP','KSB','KSC','MDH','REN'] as $row => $value): 
+						/*foreach (['AMK','KGS','KIB','KIP','KSB','KSC','MDH','REN'] as $row => $value):*/
+						foreach (['KIP'] as $row => $value):
+
 					?>
 					<div class="col-sm-4 col-4" style="cursor: pointer;" onclick="choosing('<?= $value ?>')">
 						<img src="<?= base_url('assets/logo/'.$value.'.png') ?>" class="img-thumbnail animate__animated animate__fadeInUp">

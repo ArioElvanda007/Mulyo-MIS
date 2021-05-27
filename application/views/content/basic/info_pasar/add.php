@@ -28,7 +28,7 @@
 									<div class="form-group">
 										<label>Jenis Pekerjaan*</label>
 										<select class="form-control" name="TipePekerjaan">
-											<?php foreach (['BENDUNG','BENDUNGAN','IRIGASI','IRIGASI','PERPIPAAN','PENGENDALIAN BANJIR','SUNGAI DAN PANTAI'] as $row => $value): ?>
+											<?php foreach (['BENDUNG','BENDUNGAN','IRIGASI','PERPIPAAN','PENGENDALIAN BANJIR','SUNGAI DAN PANTAI','AIR TANAH DAN AIR BAKU'] as $row => $value): ?>
 												<option value="<?= $value ?>"><?= $value ?></option>
 											<?php endforeach ?>
 										</select>
@@ -112,7 +112,7 @@
 										<div class="form-group">
 											<label>Sumber Dana Negara</label>
 											<select class="form-control" name="SDDN">
-												<?php foreach (['APBN','SBSN','LOAD'] as $row => $value): ?>
+												<?php foreach (['APBN','SBSN','LOAN'] as $row => $value): ?>
 													<option value="<?= $value ?>"><?= $value ?></option>
 												<?php endforeach ?>
 											</select>
