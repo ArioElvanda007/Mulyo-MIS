@@ -4,9 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Main extends MY_Controller {
 
 	public function index() {
-		// $this->parseData['title'] = 'Dashboard';
-		// $this->load->view('Main', $this->parseData);
-		redirect('Basic/job');
+		$this->parseData['title'] = 'Dashboard';
+		$this->load->view('Main', $this->parseData);
 	}
 	public function logout() {
 		$this->session->sess_destroy();
