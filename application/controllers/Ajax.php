@@ -16,8 +16,8 @@ class Ajax extends MY_Controller {
 	public function getTahapanTenderByJobNo($JobNo) {
 		$data = $this->job->getTahapanTenderByJobNo($JobNo);
 		foreach ($data as $row => $value) {
-			$data[$row]->DrTgl = $this->dateToPeriode($value->DrTgl);
-			$data[$row]->SpTgl = $this->dateToPeriode($value->SpTgl);
+			$data[$row]->DrTgl_toPeriode = $this->dateToPeriode($value->DrTgl);
+			$data[$row]->SpTgl_toPeriode = $this->dateToPeriode($value->SpTgl);
 			$data[$row]->TimeEntry = $this->beautyDate($value->TimeEntry, true);
 		}
 		echo json_encode($data);
@@ -31,9 +31,26 @@ class Ajax extends MY_Controller {
 	public function addTahapanTender() {
 		if ($this->input->post()) {
 			$data = $this->input->post();
-			$data['TimeEntry'] = date('Y-m-d H:i:s');
-			$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
-			$this->job->insertTahapanTender($data);
+			if ($data['LedgerNo'] <= 0) {
+				$data['TimeEntry'] = date('Y-m-d H:i:s');
+				$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');
+				$this->job->insertTahapanTender($data);
+				unset($data['LedgerNo']);
+			} else {
+				$LedgerNo = $data['LedgerNo'];
+				unset($data['LedgerNo']);
+				$this->job->updateTahapanTender($data, $LedgerNo);
+				// INSERT TO EDIT RECORD
+				$this->job->insertEditTahapanTender([
+					'JobNo' => $data['JobNo'],
+					'NamaTahapan' => $data['Tahap'],
+					'DrTgl' => $data['DrTgl'],
+					'SpTgl' => $data['SpTgl'],
+					'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
+					'TimeEntry' => date('Y-m-d H:i:s'),
+					'NamaSistem' => $data['NamaSistem']
+				]);
+			}
 			echo "success";
 		} else {
 			echo "failure";

@@ -76,11 +76,29 @@ class Job extends CI_Model {
 		return $this->db->update('Job', $data);
 	}
 	public function getTahapanTenderByJobNo($JobNo) {
-		$this->db->where('JobNo', $JobNo);
-		return $this->db->get('TahapanTender')->result_object();
+		return $this->db->query("
+			SELECT 
+			    TahapanTender.*,
+			    MasterTahapanTender.id_SisPeng,
+			    (
+			    	SELECT COUNT(*) FROM EditTahapanTender 
+			    	WHERE EditTahapanTender.JobNo = TahapanTender.JobNo 
+			    ) AS count
+			FROM TahapanTender 
+			LEFT JOIN MasterTahapanTender ON MasterTahapanTender.NamaTahapan = TahapanTender.Tahap 
+			AND MasterTahapanTender.NamaSistem = TahapanTender.NamaSistem
+			WHERE TahapanTender.JobNo = '$JobNo';
+		")->result_object();
 	}
 	public function insertTahapanTender($data) {
 		return $this->db->insert('TahapanTender', $data);
+	}
+	public function insertEditTahapanTender($data) {
+		return $this->db->insert('EditTahapanTender', $data);
+	}
+	public function updateTahapanTender($data, $LedgerNo) {
+		$this->db->where('LedgerNo', $LedgerNo);
+		return $this->db->update('TahapanTender', $data);
 	}
 	public function getTahapanTenderByJobNo_SINGLE($JobNo) {
 		$this->db->order_by('TimeEntry', 'desc');
