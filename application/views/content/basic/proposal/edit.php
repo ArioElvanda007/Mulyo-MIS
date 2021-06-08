@@ -191,19 +191,21 @@
 	})
 	function changeJobNo() {
 		var InfoPasarId = $("#InfoPasarId").val();
-		setLoading(true);
-		$.ajax({
-			url:'<?= site_url("Ajax/getInfoPasarById/") ?>'+InfoPasarId,
-			type:'GET',
-			success:function(res) {
-				if (res) {
-					var data = $.parseJSON(res);
-					$("#SatuanKerja").val(data.SatuanKerja);
-					$("#SDDN").val(data.SDDN);
+		if (InfoPasarId) {
+			setLoading(true);
+			$.ajax({
+				url:'<?= site_url("Ajax/getInfoPasarById/") ?>'+InfoPasarId,
+				type:'GET',
+				success:function(res) {
+					if (res) {
+						var data = $.parseJSON(res);
+						$("#SatuanKerja").val(data.SatuanKerja);
+						$("#SDDN").val(data.SDDN);
+					}
+					setLoading();
 				}
-				setLoading();
-			}
-		})
+			})
+		}
 	}
 	function changePesertaTender() {
 		$("#appendTender").empty();
