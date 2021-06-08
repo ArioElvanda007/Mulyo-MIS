@@ -363,6 +363,10 @@
                         $("#url-pembukaan").html(_html);
                         $("#form-pembukaan").hide();
                         $("#footer-pembukaan").hide();
+                    } else {
+                        $("#form-pembukaan").show();
+                        $("#footer-pembukaan").show();
+                        $("#url-pembukaan").html('');
                     }
                     setLoading();
                 }
