@@ -119,8 +119,14 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-success" id="alertTahapahTender" style="display: none">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Heheey</strong>
+                </div>
                 <form action="#" method="POST" id="formEntryTahapanTender">
                     <input type="hidden" name="JobNo" id="JobNo_tahapanTender" value="0">
+                    <input type="hidden" name="LedgerNo" id="LedgerNo" value="0">
+                    <input type="hidden" name="NamaSistem" id="NamaSistem" value="">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -147,10 +153,13 @@
                             </div>
                         </div>
                     </div><!-- / ROW -->
-                    <button class="btn btn-primary" type="button" onclick="saveTahapan(this)">Simpan</button>
+                    <button class="btn btn-primary" id="buttonTahapanTender" type="button" onclick="saveTahapan(this)">Simpan</button>
                 </form>
                 <br />
-                <legend>List Tahapan Tender</legend>
+                <p style="float: right;margin: 0;font-size: 20px">Revisi: <span id="totalTahapanEdited"></span></p>
+                <legend>
+                    List Tahapan Tender
+                </legend>
                 <br />
                 <table class="table table-bordered">
                     <thead>
@@ -160,6 +169,7 @@
                             <th>Dari Tanggal</th>
                             <th>Sampai Tanggal</th>
                             <th>Time Entry</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="appendTahapanTenderList"></tbody>
@@ -330,18 +340,24 @@
                 type: 'GET',
                 success:function(res) {
                     var _html = '';
+                    var totalTahapanEdited = 0;
                     $.each($.parseJSON(res), function(i,v) {
+                        if(i == 0) $("#totalTahapanEdited").html(v.count);
                         _html += '<tr>';
                             _html += '<td>'+(i + 1)+'</td>';
                             _html += '<td>'+v.Tahap+'</td>';
-                            _html += '<td>'+v.DrTgl+'</td>';
-                            _html += '<td>'+v.SpTgl+'</td>';
+                            _html += '<td>'+v.DrTgl_toPeriode+'</td>';
+                            _html += '<td>'+v.SpTgl_toPeriode+'</td>';
                             _html += '<td>'+v.TimeEntry+'</td>';
+                            _html += '<td>';
+                                _html += '<button type="button" onclick="editTahapan(\''+v.LedgerNo+'\',\''+v.SpTgl+'\',\''+v.DrTgl+'\',\''+v.Tahap+'\',\''+v.id_SisPeng+'\')" class="btn btn-info"><i class="fa fa-edit"></i></button>';
+                            _html += '</td>';
                         _html += '</tr>';
                     });
                     $("#appendTahapanTenderList").html(_html);
                     setLoading();
                     if (openModal) {
+                        $("#buttonTahapanTender").html('Simpan');
                         $("#tahapanTender").modal('show');
                         changeSistemPengadaan();
                     }
@@ -402,16 +418,17 @@
             });
         }
     }
-    function changeSistemPengadaan() {
+    function changeSistemPengadaan(def = null) {
         var id_SisPeng = $("#sistemPengadaan").val();
         $("#labelTahapanTender").html('Loading..');
+        $("#NamaSistem").val($("#sistemPengadaan option:selected").text());
         $.ajax({
             url: '<?= site_url("Ajax/getTahapanTenderBySispeng/") ?>'+id_SisPeng,
             type: 'GET',
             success:function(res) {
                 var _html = '';
                 $.each($.parseJSON(res), function(i,v) {
-                    _html += '<option value="'+v.NamaTahapan+'">'+v.NamaTahapan+'</option>';
+                    _html += '<option '+(v.NamaTahapan == def ? 'selected': '')+' value="'+v.NamaTahapan+'">'+v.NamaTahapan+'</option>';
                 })
                 $("#Tahap").html(_html);
                 $("#labelTahapanTender").html('Nama Tahapan Tender');
@@ -430,6 +447,11 @@
                     $("#SpTgl").val('');
                     $("#DrTgl").val('');
                     openTahapan($("#JobNo_tahapanTender").val(), false);
+                    $("#alertTahapahTender strong").html('Data tahapan tender berhasil disimpan!');
+                    $("#alertTahapahTender").show();
+                    setTimeout(function() {
+                        $("#alertTahapahTender").hide();
+                    }, 3000);
                 }
                 $(ev).attr('disabled',false).html('Simpan');
             }
@@ -450,5 +472,16 @@
                 $(ev).attr('disabled',false).html('Simpan');
             }
         })
+    }
+
+    // EDIT TAHAPAN TENDER
+    function editTahapan(LedgerNo, SpTgl, DrTgl, Tahap, id_SisPeng) {
+        $("#tahapanTender").modal('show');
+        $("#LedgerNo").val(LedgerNo);
+        $("#DrTgl").val(DrTgl);
+        $("#SpTgl").val(SpTgl);
+        $("#sistemPengadaan").val(id_SisPeng).change();
+        changeSistemPengadaan(Tahap);
+        $("#buttonTahapanTender").html('Ubah');
     }
 </script>
