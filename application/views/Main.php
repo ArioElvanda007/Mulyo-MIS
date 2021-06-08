@@ -112,16 +112,19 @@
         <script src="<?= base_url('assets/plugins/numeral/numeral.js') ?>"></script>
         <script src="<?= base_url('assets/myjs/blockui.js') ?>"></script>
         <script type="text/javascript">
+            function setMessage(status, title, message) {
+                Swal.fire({
+                  icon: status,
+                  title: title,
+                  text: message
+                })
+            }
             $(function() {
                 var title = '<?= $this->session->flashdata("title") ?>';
                 var status = '<?= $this->session->flashdata("status") ?>';
                 var message = '<?= $this->session->flashdata("message") ?>';
                 if(title && status && message) {
-                    Swal.fire({
-                      icon: status,
-                      title: title,
-                      text: message
-                    })
+                   setMessage(status, title, message);
                 }
                 // DATATABLE
                 $("#datatable").DataTable({

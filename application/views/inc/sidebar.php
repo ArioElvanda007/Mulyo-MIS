@@ -19,7 +19,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            	<li class="nav-item">
+            	<!-- <li class="nav-item">
             		<?php
             			$menuDashboard = false;
             			if (strtolower($this->uri->segment(1)) == 'main' || strtolower($this->uri->segment(1)) == '') {
@@ -32,7 +32,7 @@
 	                        Dashboard
 	                    </p>
 	                </a>
-				</li>
+				</li> -->
 	            <li class="nav-item <?= (strtolower($this->uri->segment(1)) == 'basic' ? 'menu-open' : "'") ?>">
 	                <a href="#" class="nav-link <?= (strtolower($this->uri->segment(1)) == 'basic' ? 'active' : "'") ?>">
 	                    <i class="fa fa-database nav-icon"></i>
@@ -87,7 +87,13 @@
 	                        </a>
 	                    </li>
 	                    <li class="nav-item">
-	                        <a href="<?= base_url('Basic/job') ?>" class="nav-link">
+	                    	<?php
+	                    		$menuJob = false;
+	                    		if (strtolower($this->uri->segment(2)) == 'job' || strtolower($this->uri->segment(2)) == 'job_form') {
+	                    			$menuJob = true;
+	                    		}
+	                    	?>
+	                        <a href="<?= base_url('Basic/job') ?>" class="nav-link <?= ($menuJob ? 'active' : '') ?>">
 	                            <p class="ml-30">Job</p>
 	                        </a>
 	                    </li>

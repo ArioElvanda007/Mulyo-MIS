@@ -27,8 +27,13 @@
 						<?= $this->session->flashdata('login_error'); ?>
 					</div>
 				<?php endif ?>
+<<<<<<< HEAD
 				<p class="login-box-msg">Welcome To This Company</p>
 				<div class="row" id="corp-box">
+=======
+				<p class="login-box-msg">Silahkan pilih perusahaan</p>
+				<div class="row" id="corp-box" style="display: none;">
+>>>>>>> 0e97b6bbb17fc922c1443529115d7b3e11bd9a40
 					<?php
 						/*foreach (['AMK','KGS','KIB','KIP','KSB','KSC','MDH','REN'] as $row => $value):*/
 						foreach (['KIP'] as $row => $value):
@@ -39,8 +44,8 @@
 					</div>
 					<?php endforeach ?>
 				</div>
-				<form action="<?= base_url('Auth') ?>" method="post" style="display: none;">
-					<input type="hidden" name="corp" id="corp" value="">
+				<form action="<?= base_url('Auth') ?>" method="post">
+					<input type="hidden" name="corp" id="corp" value="PRA">
 					<div class="input-group mb-3">
 						<input type="text" class="form-control" name="username" placeholder="Username">
 						<div class="input-group-append">
