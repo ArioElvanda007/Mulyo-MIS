@@ -11,6 +11,16 @@ class Main extends MY_Controller {
 		$this->session->sess_destroy();
 		redirect('Auth');
 	}
+	public function updatePassword() {
+		if ($this->input->post()) {
+			$token = json_decode($this->session->userdata('MIS_LOGGED_TOKEN'));
+			$this->users->updateUser([
+				'PasswordCI' => crypt($this->input->post('Password'), '')
+			],$token->UserID);
+			$this->setMessage('Berhasil','success','Password anda berhasil diubah!');
+		}
+		redirect($_SERVER['HTTP_REFERER']);
+	}
 
 }
 
