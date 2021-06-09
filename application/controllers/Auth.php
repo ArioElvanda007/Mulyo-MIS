@@ -15,7 +15,7 @@ class Auth extends CI_Controller {
 		if ($this->input->post()) {
 			$user = $this->users->getUserByUsername($this->input->post('username'));
 			if ($user) {
-				if (password_verify($this->input->post('password'), $user->Password)) {
+				if (password_verify($this->input->post('password'), $user->PasswordCI)) {
 					$this->session->set_userdata([
 						'MIS_LOGGED_CORP' => $this->input->post('corp'),
 						'MIS_LOGGED_NAME' => $user->UserName,

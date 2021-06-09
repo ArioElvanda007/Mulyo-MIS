@@ -12,7 +12,7 @@ class Basic extends MY_Controller {
 		if ($this->input->post()) {
 			$data = $this->input->post();
 			if ($this->input->post('Password')) {
-				$data['Password'] = crypt($this->input->post('Password'), '');
+				$data['PasswordCI'] = crypt($this->input->post('Password'), '');
 			}
 			if ($this->input->post('update')) {
 				unset($data['UserID']);
