@@ -15,15 +15,20 @@ class Auth extends CI_Controller {
 		if ($this->input->post()) {
 			$user = $this->users->getUserByUsername($this->input->post('username'));
 			if ($user) {
-				$this->session->set_userdata([
-					'MIS_LOGGED_CORP' => $this->input->post('corp'),
-					'MIS_LOGGED_NAME' => $user->UserName,
-					'MIS_LOGGED_TOKEN' => json_encode($user)
-				]);
-				$this->setMessage('Yeeaayy','success','Login berhasil, selamat datang '. $user->UserName);
-				redirect('Main');
+				if (password_verify($this->input->post('password'), $user->Password)) {
+					$this->session->set_userdata([
+						'MIS_LOGGED_CORP' => $this->input->post('corp'),
+						'MIS_LOGGED_NAME' => $user->UserName,
+						'MIS_LOGGED_TOKEN' => json_encode($user)
+					]);
+					$this->setMessage('Yeeaayy','success','Login berhasil, selamat datang '. $user->UserName);
+					redirect('Main');
+				} else {
+					$this->session->set_flashdata('login_error','Username dan password tidak sesuai');
+					redirect('Auth');
+				}
 			} else {
-				$this->session->set_flashdata('login_error','Username dan password tidak sesuai');
+				$this->session->set_flashdata('login_error','Username tidak terdaftar');
 				redirect('Auth');
 			}
 		} else {

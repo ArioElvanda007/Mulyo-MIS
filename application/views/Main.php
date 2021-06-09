@@ -131,7 +131,7 @@
                     "responsive": true, 
                     "lengthChange": true, 
                     "autoWidth": false,
-                    "order": [[ 0, "desc" ]]
+                    "order": [[ 0, "asc" ]]
                 });
                 // SELECT2
                 $(".select2").select2();
@@ -153,6 +153,23 @@
             }
             function toDecimal(e) {
                 $(e).val(numeral($(e).val()).format('0,0'));
+            }
+            var idleTime = 0;
+            $(document).ready(function () {
+                var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+                $(this).mousemove(function (e) {
+                    idleTime = 0;
+                });
+                $(this).keypress(function (e) {
+                    idleTime = 0;
+                });
+            });
+
+            function timerIncrement() {
+                idleTime = idleTime + 1;
+                if (idleTime > 19) { // 20 minutes
+                    window.location.href = '<?= site_url("Main/logout") ?>';
+                }
             }
         </script>
     </body>

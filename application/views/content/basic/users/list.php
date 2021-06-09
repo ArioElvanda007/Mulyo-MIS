@@ -2,7 +2,7 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1>Data Instansi</h1>
+				<h1>Data Users</h1>
 			</div>
 		</div>
 	</div><!-- /.container-fluid -->
@@ -20,8 +20,11 @@
 						<table id="datatable" class="table table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>No. Urut</th>
-									<th>Nama Instansi/Direktorat</th>
+									<th>#</th>
+									<th>User ID</th>
+									<th>Nama</th>
+									<th>NIK</th>
+									<th>Email</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
@@ -29,11 +32,13 @@
 								<?php foreach ($data as $row => $value): ?>
 									<tr>
 										<td style="width: 5%"><?= $row + 1 ?></td>
-										<td><?= $value->NamaDirektorat ?></td>
+										<td><?= $value->UserID ?></td>
+										<td><?= $value->UserName ?></td>
+										<td><?= $value->NIK ?></td>
+										<td><?= $value->Email ?></td>
 										<td style="width: 15%">
-											<a title="Tambah Detail" href="<?= site_url("Basic/sub_instansi/".$value->Id_Instansi) ?>" class="btn btn-success"><i class="fa fa-cubes"></i></a>
 											<a href="#edit<?= $row ?>" data-toggle="modal" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-											<a href="<?= site_url('Basic/instansi/'.$value->Id_Instansi) ?>" onclick="return confirm('Apa anda yakin?')" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+											<a href="<?= site_url('Basic/users/'.$value->UserID) ?>" onclick="return confirm('Apa anda yakin?')" class="btn btn-danger"><i class="fa fa-trash"></i></a>
 										</td>
 									</tr>
 									<!-- MODAL EDIT -->
@@ -48,11 +53,24 @@
 													</button>
 												</div>
 												<div class="modal-body">
-													<form action="<?= site_url('Basic/instansi') ?>" method="POST">
-														<input type="hidden" name="Id_Instansi" value="<?= $value->Id_Instansi ?>">
+													<form action="<?= site_url('Basic/users') ?>" method="POST">
+														<input type="hidden" name="update" value="true">
+														<input type="hidden" class="form-control" name="UserID" required value="<?= $value->UserID ?>">
 														<div class="form-group">
-															<label>Nama Instansi/Direktorat*</label>
-															<input type="text" class="form-control" name="NamaDirektorat" required value="<?= $value->NamaDirektorat ?>">
+															<label>Nama*</label>
+															<input type="text" required class="form-control" name="UserName" value="<?= $value->UserName ?>">
+														</div>
+														<div class="form-group">
+															<label>Password</label>
+															<input type="password" class="form-control" name="Password">
+														</div>
+														<div class="form-group">
+															<label>NIK</label>
+															<input type="text" class="form-control" name="NIK" value="<?= $value->NIK ?>">
+														</div>
+														<div class="form-group">
+															<label>Email</label>
+															<input type="email" class="form-control" name="Email" value="<?= $value->Email ?>">
 														</div>
 												</div>
 												<div class="modal-footer">
@@ -84,10 +102,26 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form action="<?= site_url('Basic/instansi') ?>" method="POST">
+				<form action="<?= site_url('Basic/users') ?>" method="POST">
 					<div class="form-group">
-						<label>Nama Instansi/Direktorat*</label>
-						<input type="text" class="form-control" name="NamaDirektorat" required>
+						<label>User ID*</label>
+						<input type="text" class="form-control" name="UserID" required>
+					</div>
+					<div class="form-group">
+						<label>Nama*</label>
+						<input type="text" required class="form-control" name="UserName">
+					</div>
+					<div class="form-group">
+						<label>Password*</label>
+						<input type="password" required class="form-control" name="Password">
+					</div>
+					<div class="form-group">
+						<label>NIK</label>
+						<input type="text" class="form-control" name="NIK">
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="email" class="form-control" name="Email">
 					</div>
 			</div>
 			<div class="modal-footer">

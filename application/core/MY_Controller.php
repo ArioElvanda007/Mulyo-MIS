@@ -130,6 +130,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('InfoPasar','infoPasar',TRUE);
 		$this->load->model('Karyawan','karyawan',TRUE);
 		$this->load->model('Job','job',TRUE);
+		$this->load->model('Users','users',TRUE);
 	}
 	public function dateToPeriode($date) {
 		$month = substr($date, 5,2);
