@@ -42,7 +42,7 @@
 	                    </p>
 	                </a>
 	                <ul class="nav nav-treeview">
-	                	<li class="nav-item">
+	                	<!-- <li class="nav-item">
 	                    	<?php
 	                    		$menuUser = false;
 	                    		if (strtolower($this->uri->segment(2)) == 'users') {
@@ -52,7 +52,7 @@
 	                        <a href="<?= base_url('Basic/users') ?>" class="nav-link <?= ($menuUser ? 'active' : '') ?>">
 	                            <p class="ml-30">Users</p>
 	                        </a>
-	                    </li>
+	                    </li> -->
 	                    <li class="nav-item">
 	                    	<?php
 	                    		$menuInstansi = false;
