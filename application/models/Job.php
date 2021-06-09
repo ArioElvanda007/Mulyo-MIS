@@ -10,13 +10,13 @@ class Job extends CI_Model {
 	}
 	public function getAllCount() {
 		return $this->db->query("
-			SELECT COUNT(*) AS count FROM Job 
+			SELECT COUNT(*) AS count FROM Job WHERE company = 'PRA' AND TipeJob = 'Project' 
 		")->row_object();
 	}
 	public function getAllData($limit, $start, $order, $dir) {
 		return $this->db->query("
 			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob,Deskripsi,Kategori
-			FROM Job 
+			FROM Job WHERE company = 'PRA' AND TipeJob = 'Project' 
 			ORDER BY $order $dir 
             OFFSET $start ROWS 
 			FETCH NEXT $limit ROWS ONLY;
@@ -27,12 +27,13 @@ class Job extends CI_Model {
 		return $this->db->query("
 			SELECT JobNo,JobNm,Provinsi,Instansi,HPS,StatusJob,Deskripsi,Kategori 
 			FROM Job 
-			WHERE LOWER(JobNo) LIKE '%$search%' 
-			OR LOWER(JobNm) LIKE '%$search%' 
-			OR LOWER(Provinsi) LIKE '%$search%' 
-			OR LOWER(Instansi) LIKE '%$search%' 
-			OR LOWER(HPS) LIKE '%$search%' 
-			OR LOWER(StatusJob) LIKE '%$search%' 
+			WHERE LOWER(JobNo) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(JobNm) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(Provinsi) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(Instansi) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(HPS) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(StatusJob) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			ORDER BY $order $dir 
 			OFFSET $start ROWS 
 			FETCH NEXT $limit ROWS ONLY;
 		")->result_object();
@@ -41,13 +42,12 @@ class Job extends CI_Model {
 		$search = strtolower($search);
 		return $this->db->query("
 			SELECT COUNT(*) AS count FROM Job  
-			FROM Job 
-			WHERE LOWER(JobNo) LIKE '%$search%' 
-			OR LOWER(JobNm) LIKE '%$search%' 
-			OR LOWER(Provinsi) LIKE '%$search%' 
-			OR LOWER(Instansi) LIKE '%$search%' 
-			OR LOWER(HPS) LIKE '%$search%' 
-			OR LOWER(StatusJob) LIKE '%$search%' 
+			WHERE LOWER(JobNo) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(JobNm) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(Provinsi) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(Instansi) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(HPS) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
+			OR LOWER(StatusJob) LIKE '%$search%' AND company = 'PRA' AND TipeJob = 'Project' 
 		")->row_object();
 	}
 	public function getJobByJobNo($JobNo) {

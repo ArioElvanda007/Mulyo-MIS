@@ -7,6 +7,40 @@ class Basic extends MY_Controller {
 		redirect('Main');
 	}
 
+	// USERS
+	public function users($UserID = null) {
+		if ($this->input->post()) {
+			$data = $this->input->post();
+			if ($this->input->post('Password')) {
+				$data['Password'] = crypt($this->input->post('Password'), '');
+			}
+			if ($this->input->post('update')) {
+				unset($data['UserID']);
+				unset($data['update']);
+				$this->users->updateUser($data, $this->input->post('UserID'));
+				$this->setMessage('Berhasil','success','Data user berhasil diubah!');
+				redirect('Basic/users');
+			} else {
+				if ($this->users->getUserByUsername($this->input->post('username'))) {
+					$this->setMessage('Oppss','error','USER ID Telah terdaftar!');
+					redirect('Basic/users');
+				}
+				$this->users->insertUser($data);
+				$this->setMessage('Berhasil','success','Data user berhasil ditambah!');
+				redirect('Basic/users');
+			}
+		} elseif($UserID) {
+			$this->users->deleteUser($UserID);
+			$this->setMessage('Berhasil','success','Data user berhasil dihapus!');
+			redirect('Basic/users');
+		} else {
+			$this->parseData['title'] = "Data User";
+			$this->parseData['content'] = "content/basic/users/list";
+			$this->parseData['data'] = $this->users->getUsers();
+			$this->load->view('Main', $this->parseData);
+		}
+	}
+
 	// INSTANSI
 	public function instansi($Id_Instansi = null) {
 		if ($this->input->post()) {
