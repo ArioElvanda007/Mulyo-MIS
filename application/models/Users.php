@@ -6,7 +6,7 @@ class Users extends CI_Model {
 	public function getUsers() {
 		return $this->db->query("
 			SELECT 
-				UserID,UserName,Email,NIK 
+				UserID,UserName,Email,NIK,PasswordCI 
 			FROM Login 
 			ORDER BY UserName ASC
 		")->result_object();

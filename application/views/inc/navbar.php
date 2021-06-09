@@ -10,6 +10,9 @@
 			<a href="#" class="nav-link">Contact</a>
 		</li>
 		<li class="nav-item d-none d-sm-inline-block">
+			<a href="#changePassword" data-toggle="modal" class="nav-link">Ubah Password</a>
+		</li>
+		<li class="nav-item d-none d-sm-inline-block">
 			<a href="<?= site_url('Main/logout') ?>" class="nav-link"><i class="fa fa-key"></i> Log out</a>
 		</li>
 	</ul>
@@ -43,3 +46,29 @@
 		</li>
 	</ul>
 </nav>
+
+<div class="modal fade" id="changePassword">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Ubah Password Anda</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="<?= site_url('Main/updatePassword') ?>" method="POST">
+					<div class="form-group">
+						<label>Password*</label>
+						<input type="password" class="form-control" name="Password" placeholder="Masukan password baru">
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+				<button type="submit" class="btn btn-primary">Simpan!</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
