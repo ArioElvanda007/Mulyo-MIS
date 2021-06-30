@@ -51,8 +51,12 @@ class Job extends CI_Model {
 		")->row_object();
 	}
 	public function getJobByJobNo($JobNo) {
-		$this->db->where('JobNo', $JobNo);
-		return $this->db->get('Job')->row_object();
+		return $this->db->query("
+			SELECT Job.*,InfoPasar.SDDN 
+			FROM Job 
+			LEFT JOIN InfoPasar ON InfoPasar.jobNo = Job.JobNo 
+			WHERE Job.JobNo = '$JobNo'
+		")->row_object();
 	}
 	public function getPembukaanByJobNo($JobNo) {
 		return $this->db->query("SELECT HasilPembukaan FROM Job WHERE JobNo = '$JobNo'")->row_object();

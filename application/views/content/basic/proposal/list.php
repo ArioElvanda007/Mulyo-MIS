@@ -193,9 +193,9 @@
                 <div id="url-pembukaan" style="text-align: center;"></div>
                 <form action="<?= site_url('Basic/proposal_pembukaan') ?>" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="JobNo" id="JobNo_pembukaan">
-                    <div class="form-group" id="form-pembukaan">
-                        <label>File Hasil Pembukaan (.pdf)</label>
-                        <input type="file" class="form-control" name="HasilPembukaan" required>
+                    <label id="labelUploadFile">File Hasil Pembukaan (.png atau .jpg)</label>
+                    <div class="imagePreview" id="form-pembukaan">
+                        <input type="file" class="upload" name="HasilPembukaan" required onchange="preview(this)">
                     </div>
             </div>
             <div class="modal-footer" id="footer-pembukaan">
@@ -375,14 +375,16 @@
                 success:function(res) {
                     var data = $.parseJSON(res);
                     if (data.HasilPembukaan) {
-                        var _html = '<a href="<?= base_url("assets/files/jobs/") ?>'+data.HasilPembukaan+'" target="_blank" class="btn btn-primary"><i class="fa fa-search"></i> Lihat File</a>';
+                        var _html = '<img src="<?= base_url("assets/files/jobs/") ?>'+data.HasilPembukaan+'" class="img-thumbnail">';
                         $("#url-pembukaan").html(_html);
                         $("#form-pembukaan").hide();
                         $("#footer-pembukaan").hide();
+                        $("#labelUploadFile").hide();
                     } else {
                         $("#form-pembukaan").show();
                         $("#footer-pembukaan").show();
                         $("#url-pembukaan").html('');
+                        $("#labelUploadFile").show();
                     }
                     setLoading();
                 }

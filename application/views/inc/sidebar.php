@@ -110,8 +110,8 @@
 	                    </li>
 	                </ul>
 	            </li>
-	            <li class="nav-item">
-	                <a href="#" class="nav-link">
+	            <li class="nav-item <?= (strtolower($this->uri->segment(1)) == 'entry' ? 'menu-open' : "'") ?>">
+	                <a href="#" class="nav-link <?= (strtolower($this->uri->segment(1)) == 'entry' ? 'active' : "'") ?>">
 	                    <i class="nav-icon fa fa-edit"></i>
 	                    <p>
 	                        Entry
@@ -120,12 +120,18 @@
 	                </a>
 	                <ul class="nav nav-treeview">
 	                	<li class="nav-item">
-	                        <a href="<?= base_url('Entry/job') ?>" class="nav-link">
+	                		<?php
+		            			$menuEntryRap = false;
+		            			if (strtolower($this->uri->segment(2)) == '' || strtolower($this->uri->segment(2)) == 'index' || strtolower($this->uri->segment(2)) == 'rap') {
+		            				$menuEntryRap = true;
+		            			}
+            				?>
+	                        <a href="<?= base_url('Entry/rap') ?>" class="nav-link <?= ($menuEntryRap ? 'active' : '') ?>">
 	                            <p class="ml-30">RAP</p>
 	                        </a>
 	                    </li>
 	                    <li class="nav-item">
-	                        <a href="<?= base_url('Entry/job') ?>" class="nav-link">
+	                        <a href="<?= base_url('Entry/pd_pratender') ?>" class="nav-link">
 	                            <p class="ml-30">PD Pratender</p>
 	                        </a>
 	                    </li>
