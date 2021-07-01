@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="<?= base_url('assets/plugins/select2/css/select2.min.css') ?>">
         <link rel="stylesheet" href="<?= base_url('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
 
+
         <style type="text/css">
             .nav-item > a.nav-link > p { font-size: 13px !important; }
             footer.main-footer { font-size: 13px !important; }
@@ -73,6 +74,8 @@
                 }
             }
         </script>
+
+        <link rel="icon" type="image/png" href="<?php echo base_url() ?>assets/dist/img/favicon-96x96.png" />
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">

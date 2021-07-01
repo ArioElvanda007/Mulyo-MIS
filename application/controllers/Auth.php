@@ -21,7 +21,7 @@ class Auth extends CI_Controller {
 						'MIS_LOGGED_NAME' => $user->UserName,
 						'MIS_LOGGED_TOKEN' => json_encode($user)
 					]);
-					$this->setMessage('Yeeaayy','success','Login berhasil, selamat datang '. $user->UserName);
+					$this->setMessage('Welcome','success','Login berhasil, selamat datang '. $user->UserName);
 					redirect('Main');
 				} else {
 					$this->session->set_flashdata('login_error','Username dan password tidak sesuai');

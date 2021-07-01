@@ -12,6 +12,9 @@
 		.btn { font-size: 13px !important; }
 		input, select { font-size: 13px !important; }
 	</style>
+
+<link rel="icon" type="image/png" href="<?php echo base_url() ?>assets/dist/img/favicon-96x96.png" />
+
 </head>
 <body class="hold-transition login-page">
 	<div class="login-box">
