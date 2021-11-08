@@ -20,7 +20,7 @@
 						<br /><br />
 						<form action="<?= site_url('Basic/proposal_edit') ?>" method="POST" enctype="multipart/form-data">
 							<input type="hidden" id="InfoPasarId" name="InfoPasarId" value="<?= $data->InfoPasarId ?>">
-							<input type="hidden" id="SDDN" value="">
+							<input type="hidden" id="SDDN" value="<?= $data->SDDN ?>">
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -90,9 +90,12 @@
 									</div>
 									<div class="form-group">
 										<label>Sumber Dana</label>
-										<select class="form-control" name="SumberDana">
-											<option value="APBN">APBN</option>
-											<option <?= ($data->SumberDana == 'SBSN' ? 'selected' : '') ?> value="SBSN">SBSN</option>
+										<select class="form-control" name="SumberDana" id="SumberDana">
+											<?php foreach ([
+												'APBN','SBSN','APBD','LOAN'
+											] as $row => $value): ?>
+												<option <?= ($data->SumberDana == $value ? 'selected' : '') ?> value="<?= $value ?>"><?= $value ?></option>
+											<?php endforeach ?>
 										</select>
 									</div>
 									<div class="form-group">
@@ -375,7 +378,7 @@
 	}
 	function bruto(ev, tenderIndex = null) {
 		toDecimal(ev);
-		if ($("#SDDN").val() == 'LOAN') {
+		if ($("#SumberDana").val() != 'LOAN') {
 			var bruto = $(ev).val();
 			bruto = parseInt(bruto.replace(/,/g, ''));
 			var netto = 0;
@@ -383,6 +386,8 @@
 				netto = (bruto * 10 )/ 100;
 			}
 			$("#PenawaranNetto"+tenderIndex).val(numeral(netto).format('0,0'));
+		} else {
+			$("#PenawaranNetto"+tenderIndex).val($(ev).val());
 		}
 	}
 	function valPorsi(ev, tenderIndex = null) {

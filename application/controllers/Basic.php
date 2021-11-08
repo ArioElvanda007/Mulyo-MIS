@@ -577,7 +577,7 @@ class Basic extends MY_Controller {
 	}
 	public function proposal_pembukaan() {
 		if ($this->input->post()) {
-			$this->uploadFileConf('jobs');
+			$this->uploadImgConf('jobs');
 			if (!$this->upload->do_upload('HasilPembukaan')){
 				$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
 			} else {

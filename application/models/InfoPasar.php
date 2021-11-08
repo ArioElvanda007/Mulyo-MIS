@@ -9,7 +9,7 @@ class InfoPasar extends CI_Model {
 	}
 	public function getInfoPasar_SIMPLE() {
 		return $this->db->query("
-			SELECT InfoPasarId,jobNo From InfoPasar ORDER BY jobNo DESC
+			SELECT InfoPasarId,jobNo,SDDN From InfoPasar ORDER BY jobNo DESC
 		")->result_object();
 	}
 	public function getInfoPasarById($InfoPasarId) {

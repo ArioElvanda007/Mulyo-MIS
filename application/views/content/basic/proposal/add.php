@@ -96,9 +96,11 @@
 									</div>
 									<div class="form-group">
 										<label>Sumber Dana</label>
-										<select class="form-control" name="SumberDana">
+										<select class="form-control" name="SumberDana" id="SumberDana">
 											<option value="APBN">APBN</option>
 											<option value="SBSN">SBSN</option>
+											<option value="APBD">APBD</option>
+											<option value="LOAN">LOAN</option>
 										</select>
 									</div>
 									<div class="form-group">
@@ -207,6 +209,7 @@
 					$("#SistemKontrak").val(data.SistemKontrak);
 					$("#TahunAnggaran").val(data.TahunAnggaran);
 					$("#SDDN").val(data.SDDN);
+					$("#SumberDana").val(data.SDDN).change();
 				}
 				setLoading();
 			}
@@ -339,7 +342,7 @@
 	}
 	function bruto(ev, tenderIndex = null) {
 		toDecimal(ev);
-		if ($("#SDDN").val() == 'LOAN') {
+		if ($("#SumberDana").val() != 'LOAN') {
 			var bruto = $(ev).val();
 			bruto = parseInt(bruto.replace(/,/g, ''));
 			var netto = 0;
@@ -347,6 +350,8 @@
 				netto = (bruto * 10 )/ 100;
 			}
 			$("#PenawaranNetto"+tenderIndex).val(numeral(netto).format('0,0'));
+		} else {
+			$("#PenawaranNetto"+tenderIndex).val($(ev).val());
 		}
 	}
 	function valPorsi(ev, tenderIndex = null) {
