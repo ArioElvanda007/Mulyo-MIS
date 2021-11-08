@@ -205,6 +205,7 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
+
 	public function info_pasar_add() {
 		if ($this->input->post()) {
 			$data = $this->input->post();
@@ -243,6 +244,7 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
+	
 	public function info_pasar_edit($InfoPasarId = null) {
 		if ($this->input->post()) {
 			$data = $this->input->post();
@@ -270,6 +272,7 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
+
 	public function info_pasar_mpp($InfoPasarId = null, $LedgerNo = null) {
 		if ($this->input->post()) {
 			$data = $this->input->post();
@@ -440,14 +443,25 @@ class Basic extends MY_Controller {
 				}
 			}
 			$this->job->insertProposal($job);
+
+			// insert old table
 			for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
 				if ($this->input->post('leader'.$i)) {
+					if ($_FILES['tenderLogo'.$i]['name']) {
+						if (!$this->upload->do_upload('tenderLogo'.$i)){
+							$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+							redirect($_SERVER['HTTP_REFERER']);
+						} else {
+							$filename = $this->upload->data()['file_name'];
+						}
+					}
 					$pesertaTender = [
 						'JobNo' => $this->input->post('JobNo'),
 						'Leader' => $this->input->post('leader'.$i),
 						'PorsiLeader' => $this->input->post('leaderPorsi'.$i),
 						'PenawaranBruto' => str_replace(',', '', $this->input->post('PenawaranBruto'.$i)),
 						'PenawaranNetto' => str_replace(',', '', $this->input->post('PenawaranNetto'.$i)),
+						'logo' => $filename,
 						'TimeEntry' => date('Y-m-d H:i:s'),
 						'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
 					];
@@ -459,17 +473,50 @@ class Basic extends MY_Controller {
 							}
 						}
 					}
-					if ($_FILES['tenderLogo'.$i]['name']) {
-						if (!$this->upload->do_upload('tenderLogo'.$i)){
-							$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
-							redirect($_SERVER['HTTP_REFERER']);
-						} else {
-							$pesertaTender['logo'] = $this->upload->data()['file_name'];
-						}
-					}
 					$this->job->insertProposalTender($pesertaTender);
 				}
 			}
+
+			// insert new table
+			// for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
+			// 	if ($this->input->post('leader'.$i)) {
+			// 		if ($_FILES['tenderLogo'.$i]['name']) {
+			// 			if (!$this->upload->do_upload('tenderLogo'.$i)){
+			// 				$this->setMessage('Ooppss','warning', strip_tags($this->upload->display_errors()));
+			// 				redirect($_SERVER['HTTP_REFERER']);
+			// 			} else {
+			// 				$filename = $this->upload->data()['file_name'];
+			// 			}
+			// 		}
+			// 		$PesertaTenderLeader = [
+			// 			'jobNo' => $this->input->post('JobNo'),
+			// 			'seq' => $i,
+			// 			'name' => $this->input->post('leader'.$i),
+			// 			'bruto' => str_replace(',', '', $this->input->post('PenawaranBruto'.$i)),
+			// 			'netto' => str_replace(',', '', $this->input->post('PenawaranNetto'.$i)),
+			// 			'porsi' => str_replace(',', '', $this->input->post('leaderPorsi'.$i)),
+			// 			'logo' => $filename,
+			// 			'TimeEntry' => date('Y-m-d H:i:s'),
+			// 			'UserEntry' => $this->session->userdata('MIS_LOGGED_NAME'),
+			// 		];
+			// 		$this->job->insertPesertaTenderLeader($PesertaTenderLeader);
+			// 		$data = $this->job->getPesertaTenderLeader();
+
+			// 		if ($this->input->post('totalMember'.$i)) {
+			// 			for ($b=1; $b <= $this->input->post('totalMember'.$i); $b++) { 
+			// 				if ($this->input->post('member-'.$i.'-'.$b)) {
+			// 					$insertPesertaTenderMember['idLeader'] = $data->idLeader;
+			// 					$insertPesertaTenderMember['seq'] = $b;
+			// 					$insertPesertaTenderMember['name'] = $this->input->post('member-'.$i.'-'.$b);
+			// 					$insertPesertaTenderMember['porsi'] = $this->input->post('memberPorsi-'.$i.'-'.$b);
+
+			// 					$this->job->insertPesertaTenderMember($insertPesertaTenderMember);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// }
+
 			$this->setMessage('Berhasil','success','Data proposal berhasil ditambahkan!');
 			redirect('Basic/proposal');
 		} else {
@@ -481,6 +528,7 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
+	
 	public function proposal_edit($JobNo = null) {
 		if ($this->input->post()) {
 			$job = [
@@ -517,6 +565,8 @@ class Basic extends MY_Controller {
 			}
 			$this->job->updateJob($job, $this->input->post('JobNo'));
 			$this->job->deleteProposalTenderByJobNo($this->input->post('JobNo'));
+
+			// insert old table
 			for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
 				if ($this->input->post('leader'.$i)) {
 					$pesertaTender = [
@@ -577,6 +627,7 @@ class Basic extends MY_Controller {
 			$this->load->view('Main', $this->parseData);
 		}
 	}
+
 	public function proposal_winner() {
 		if ($this->input->post()) {
 			$this->job->updateJob([
@@ -586,6 +637,7 @@ class Basic extends MY_Controller {
 		}
 		redirect('Basic/proposal');
 	}
+
 	public function proposal_failure() {
 		if ($this->input->post()) {
 			$this->job->updateJob([
@@ -597,6 +649,7 @@ class Basic extends MY_Controller {
 		}
 		redirect('Basic/proposal');
 	}
+
 	public function proposal_pembukaan() {
 		if ($this->input->post()) {
 			$this->uploadImgConf('jobs');
@@ -618,6 +671,7 @@ class Basic extends MY_Controller {
 		$this->parseData['content'] = "content/basic/job/list";
 		$this->load->view('Main', $this->parseData);
 	}
+
 	public function listJob() {
 		$columns = [
 			0 => 'JobNo',

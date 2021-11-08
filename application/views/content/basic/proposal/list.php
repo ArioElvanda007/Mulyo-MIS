@@ -42,6 +42,7 @@
                             <table class="table table-hover" border="1" cellspacing="2" width="100%">
 
                                 <tr style="background-color: dodgerblue;">
+                                    <th>No</th>
                                     <th>Job No</th>
                                     <th>Nama Proyek</th>
                                     <th>Provinsi</th>
@@ -58,6 +59,7 @@
                                             <td><?= $value->JobNo; ?></td>
                                             <td><?= $value->JobNm; ?></td>
                                             <td><?= $value->Provinsi; ?></td>
+                                            <td><?= $value->Instansi; ?></td>
                                             <td><?= number_format($value->HPS); ?></td>
                                             <td><?= $value->StatusJob; ?></td>
                                             <td style="width: 5%">

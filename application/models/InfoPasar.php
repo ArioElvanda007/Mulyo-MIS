@@ -7,11 +7,20 @@ class InfoPasar extends CI_Model {
 		$this->db->order_by('jobNo', 'DESC');
 		return $this->db->get('InfoPasar')->result_object();
 	}
+
+	// SELECT InfoPasarId,jobNo,SDDN From InfoPasar ORDER BY jobNo DESC
 	public function getInfoPasar_SIMPLE() {
-		return $this->db->query("
-			SELECT InfoPasarId,jobNo,SDDN From InfoPasar ORDER BY jobNo DESC
+		// print_r ($this->db->query("		
+		// SELECT InfoPasarId,jobNo,SDDN From InfoPasar ORDER BY jobNo DESC
+		// ")->result_object());
+
+		return $this->db->query("		
+			select a.InfoPasarId, a.JobNo, a.SDDN from InfoPasar as a left outer join job as b on b.JobNo = a.jobNo where b.jobNo is null and not a.jobNo = '0'
+			order by a.JobNo desc
+		
 		")->result_object();
 	}
+
 	public function getInfoPasarById($InfoPasarId) {
 		$this->db->where('InfoPasarId', $InfoPasarId);
 		return $this->db->get('InfoPasar')->row_object();	

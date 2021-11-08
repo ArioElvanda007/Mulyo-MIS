@@ -2,7 +2,7 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1>Tambah Proposal</h1>
+				<h1>Update Proposal</h1>
 			</div>
 		</div>
 	</div><!-- /.container-fluid -->
@@ -218,7 +218,7 @@
 	function cloneTender(row = null) {
 		var totalTender = parseInt($("#totalTender").val());
 		++totalTender;
-		var style = (row != null ? 'background:url(<?= base_url("assets/files/jobs/") ?>'+dataPeserta[row].logo+');background-size:cover;background-position:center;background-repeat:no-repeat' : '');
+		var style = (row != null ? 'background:url(<?= base_url("assets/files/jobs/") ?>'+dataPeserta[row].Logo+');background-size:cover;background-position:center;background-repeat:no-repeat' : '');
 		var defaultBruto = (row != null ? numeral(dataPeserta[row].PenawaranBruto).format('0,0') : '0');
 		var defaultNetto = (row != null ? numeral(dataPeserta[row].PenawaranNetto).format('0,0') : '0');
 		var leader = (row != null ? dataPeserta[row].Leader : '');

@@ -58,6 +58,7 @@ class Job extends CI_Model {
 			WHERE Job.JobNo = '$JobNo'
 		")->row_object();
 	}
+	
 	public function getPembukaanByJobNo($JobNo) {
 		return $this->db->query("SELECT HasilPembukaan FROM Job WHERE JobNo = '$JobNo'")->row_object();
 	}
@@ -67,14 +68,32 @@ class Job extends CI_Model {
 	public function insertProposalTender($data) {
 		return $this->db->insert('PesertaTender', $data);
 	}
+	public function insertPesertaTenderLeader($data) {
+		return $this->db->insert('PesertaTenderLeader', $data);
+	}
+	public function getPesertaTenderLeader() {
+		return $this->db->query("
+			select * from PesertaTenderLeader order by idLeader DESC
+		")->row_object();
+	}
+	public function insertPesertaTenderMember($data) {
+		return $this->db->insert('PesertaTenderMember', $data);
+	}
 	public function updateProposalTender($data, $IdPeserta) {
 		$this->db->where('IdPeserta', $IdPeserta);
 		return $this->db->update('PesertaTender', $data);
 	}
+	
 	public function deleteProposalTenderByJobNo($JobNo) {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->delete('PesertaTender');
 	}
+
+	public function deleteProposalLeaderMemberByJobNo($JobNo) {
+		$this->db->where('JobNo', $JobNo);
+		return $this->db->delete('PesertaTender');
+	}
+
 	public function updateJob($data, $JobNo) {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->update('Job', $data);
@@ -114,10 +133,29 @@ class Job extends CI_Model {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->get('PesertaTender')->row_array();
 	}
+	
 	public function getPesertaTenderByJobNo($JobNo) {
-		$this->db->where('JobNo', $JobNo);
-		return $this->db->get('PesertaTender')->result_object();
+		// $this->db->where('JobNo', $JobNo);
+		// return $this->db->get('PesertaTender')->result_object();
+
+		return $this->db->query("
+			select idPeserta, JobNo, Leader, PorsiLeader, Member1, PorsiMember1, Member2, PorsiMember2, Member3, PorsiMember3, Member4, PorsiMember4, Member5, PorsiMember5, PenawaranBruto, PenawaranNetto, UserEntry, TimeEntry, cast(cast(Logo as varbinary(max)) as varchar(max)) as Logo from PesertaTender where JobNo = '$JobNo'
+		")->result_object();		
+
 	}
+
+	public function getPesertaTenderLeaderByJobNo($JobNo) {
+		return $this->db->query("
+			select * from PesertaTenderLeader where JobNo = '$JobNo' order by seq
+		")->result_object();
+	}
+
+	public function getPesertaTenderMemberByJobNo($JobNo) {
+		return $this->db->query("
+			select a.idLeader, a.jobNo, a.name as leader_name, a.bruto, a.netto, a.porsi as porsi_leader, a.logo, b.name as member_name, b.porsi as porsi_name from PesertaTenderLeader as a inner join PesertaTenderMember as b on b.idLeader = a.idLeader where a.jobNo = '$JobNo' order by a.seq, b.seq
+		")->result_object();
+	}
+
 	public function getMPPbyJobNo($JobNo) {
 		$this->db->where('JobNo', $JobNo);
 		$this->db->order_by('TimeEntry', 'DESC');
