@@ -22,7 +22,7 @@
 					<div class="card-body">
 						<a href="<?= site_url('Basic/proposal_add') ?>" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</a>
 						<br /><br />
-						<table id="datatable_serverside" class="table table-bordered table-hover">
+						<!-- <table id="datatable_serverside" class="table table-bordered table-hover">
 							<thead>
 								<tr>
 									<th>Job No</th>
@@ -36,7 +36,40 @@
 								</tr>
 							</thead>
 							<tbody></tbody>
-						</table>
+						</table> -->
+
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover" border="1" cellspacing="2" width="100%">
+
+                                <tr style="background-color: dodgerblue;">
+                                    <th>Job No</th>
+                                    <th>Nama Proyek</th>
+                                    <th>Provinsi</th>
+                                    <th>Instansi</th>
+                                    <th>HPS (Rp)</th>
+                                    <th>Status</th>
+                                    <th>#</th>
+                                </tr>
+
+                                <?php $no = 1;
+                                    foreach ($data_job as $j => $value) : ?>
+                                        <tr>
+                                            <td><?php echo $no++ ?></td>
+                                            <td><?= $value->JobNo; ?></td>
+                                            <td><?= $value->JobNm; ?></td>
+                                            <td><?= $value->Provinsi; ?></td>
+                                            <td><?= number_format($value->HPS); ?></td>
+                                            <td><?= $value->StatusJob; ?></td>
+                                            <td style="width: 5%">
+                                                <?php echo anchor('Basic/proposal_edit/' . $value->JobNo, '<div class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></div>') ?>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endforeach;
+                                ?>
+                            </table>
+                        </div>
+
 					</div>
 				</div>
 			</div>

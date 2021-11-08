@@ -3,9 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Basic extends MY_Controller {
 
+	public function __construct()
+    {
+        parent::__construct();
+
+        $this->load->model(array("Proposal"));
+    }
+
 	public function index() {
 		redirect('Main');
-	}
+	}	
 
 	// USERS
 	public function users($UserID = null) {
@@ -306,13 +313,27 @@ class Basic extends MY_Controller {
 
 	// PROPOSAL
 	public function proposal() {
-		$this->parseData['title'] = "Data Proposal";
-		$this->parseData['posisi'] = $this->posisi;
-		$this->parseData['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
-		$this->parseData['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
-		$this->parseData['content'] = "content/basic/proposal/list";
-		$this->load->view('Main', $this->parseData);
+		// $this->parseData['title'] = "Data Proposal";
+		// $this->parseData['posisi'] = $this->posisi;
+		// $this->parseData['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
+		// $this->parseData['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
+
+		$data['title'] = "Data Proposal";
+		$data['posisi'] = $this->posisi;
+		$data['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
+		$data['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
+		
+		// $this->load->model('Proposal');
+        // $dataJob = $this->Proposal->data_job()->result();
+		$data['data_job'] = $this->Proposal->data_job()->result();
+
+		// $this->parseData['content'] = "content/basic/proposal/list";
+		// $this->load->view('Main', $this->parseData, $data);
+		$data['content'] = "content/basic/proposal/list";
+
+		$this->load->view('Main', $data);
 	}
+
 	public function listProposal() {
 		$columns = [
 			0 => 'JobNo',
@@ -373,6 +394,7 @@ class Basic extends MY_Controller {
 		];
 		echo json_encode($json_data);
 	}
+
 	public function proposal_add() {
 		if ($this->input->post()) {
 			// CHECK AVAILABLE JOBNO
