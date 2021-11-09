@@ -476,6 +476,7 @@ class Basic extends MY_Controller {
 					$this->job->insertProposalTender($pesertaTender);
 				}
 			}
+			$this->job->updateJobTender($this->input->post('JobNo'));
 
 			// insert new table
 			// for ($i=1; $i <= $this->input->post('totalTender'); $i++) { 
@@ -549,6 +550,11 @@ class Basic extends MY_Controller {
 				'TglKontrak' => $this->input->post('RencanaTender'),
 				'StatusJob' => 'Proposal',
 				'SistemKontrak' => $this->input->post('SistemKontrak'),
+				'idPeserta1' => null,
+				'idPeserta2' => null,
+				'idPeserta3' => null,
+				'idPeserta4' => null,
+				'idPeserta5' => null,	
 			];
 			$this->uploadFileConf('jobs',true);
 			if ($_FILES['RAPfile']['name']) {
@@ -599,6 +605,8 @@ class Basic extends MY_Controller {
 					$this->job->insertProposalTender($pesertaTender);
 				}
 			}
+			$this->job->updateJobTender($this->input->post('JobNo'));
+
 			$this->setMessage('Berhasil','success','Data proposal berhasil diubah!');
 			redirect('Basic/proposal');
 		} else {

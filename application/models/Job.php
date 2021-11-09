@@ -62,23 +62,70 @@ class Job extends CI_Model {
 	public function getPembukaanByJobNo($JobNo) {
 		return $this->db->query("SELECT HasilPembukaan FROM Job WHERE JobNo = '$JobNo'")->row_object();
 	}
+
 	public function insertProposal($data) {
 		return $this->db->insert('Job', $data);
 	}
+
 	public function insertProposalTender($data) {
 		return $this->db->insert('PesertaTender', $data);
 	}
+
 	public function insertPesertaTenderLeader($data) {
 		return $this->db->insert('PesertaTenderLeader', $data);
 	}
+
 	public function getPesertaTenderLeader() {
 		return $this->db->query("
 			select * from PesertaTenderLeader order by idLeader DESC
 		")->row_object();
 	}
+
+	public function updateJobTender($JobNo) {
+		$query = $this->db->query("
+			select count(*) as total from PesertaTender where JobNo = '$JobNo'
+		")->row_object();
+		$total = $query->total;
+
+		// print_r($total); 
+
+		if ($total != 0) {
+			// $total = $total + 1;
+			for ($i=1; $i <= $total; $i++) { 
+				$data = $this->db->query("
+					select * from 
+					(select ROW_NUMBER() OVER(ORDER BY idPeserta ASC) AS seq, * from PesertaTender where JobNo = '$JobNo') as a
+					where a.seq = $i				
+				")->row_object();
+
+				// $value['idPeserta'.$i] = $data->idPeserta;
+				$value = [
+					'idPeserta'.$i => $data->idPeserta,
+				];
+
+				$this->db->where('JobNo', $JobNo);
+				$this->db->update('Job', $value);	
+			}	
+		}
+
+		return $total;
+
+		// $data = $this->db->query("
+		// 	select * from PesertaTender where idPeserta = (select max(idPeserta) from PesertaTender where JobNo = '$JobNo')
+		// ")->row_object();
+
+		// $value = [
+		// 	'idPeserta' => $data->idPeserta,
+		// ];
+
+		// $this->db->where('JobNo', $JobNo);
+		// return $this->db->update('Job', $value);
+	}
+
 	public function insertPesertaTenderMember($data) {
 		return $this->db->insert('PesertaTenderMember', $data);
 	}
+
 	public function updateProposalTender($data, $IdPeserta) {
 		$this->db->where('IdPeserta', $IdPeserta);
 		return $this->db->update('PesertaTender', $data);
@@ -98,6 +145,7 @@ class Job extends CI_Model {
 		$this->db->where('JobNo', $JobNo);
 		return $this->db->update('Job', $data);
 	}
+
 	public function getTahapanTenderByJobNo($JobNo) {
 		return $this->db->query("
 			SELECT 
