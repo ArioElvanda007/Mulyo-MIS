@@ -92,12 +92,12 @@
                 <?php $this->load->view($content); ?>
             </div>
             <!-- END CONTENT -->
-            <footer class="main-footer">
+            <!-- <footer class="main-footer">
                 <strong>Copyright &copy; <?= date('Y') ?> </strong> All rights reserved.
                 <div class="float-right d-none d-sm-inline-block">
                     <b>Version</b> 1.0.0
                 </div>
-            </footer>
+            </footer> -->
         </div>
 
         <script>
@@ -136,6 +136,30 @@
                     "autoWidth": false,
                     "order": [[ 0, "asc" ]]
                 });
+
+                $("#datatable_nosort").DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": false,
+                    "info": true,
+                    "autoWidth": false,
+                });  
+
+                $("#datatable2").DataTable({
+                    "responsive": true, 
+                    "lengthChange": true, 
+                    "autoWidth": false,
+                    "order": [[ 0, "asc" ]],
+                });                
+
+                $("#datatable3").DataTable({
+                    "responsive": true, 
+                    "lengthChange": true, 
+                    "autoWidth": false,
+                    "order": [[ 0, "asc" ]]
+                });  
+                
                 // SELECT2
                 $(".select2").select2();
             })

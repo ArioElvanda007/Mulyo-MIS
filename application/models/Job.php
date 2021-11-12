@@ -147,18 +147,23 @@ class Job extends CI_Model {
 	}
 
 	public function getTahapanTenderByJobNo($JobNo) {
+		// return $this->db->query("
+		// 	SELECT 
+		// 	    TahapanTender.*,
+		// 	    MasterTahapanTender.id_SisPeng,
+		// 	    (
+		// 	    	SELECT COUNT(*) FROM EditTahapanTender 
+		// 	    	WHERE EditTahapanTender.JobNo = TahapanTender.JobNo 
+		// 	    ) AS count
+		// 	FROM TahapanTender 
+		// 	LEFT JOIN MasterTahapanTender ON MasterTahapanTender.NamaTahapan = TahapanTender.Tahap 
+		// 	AND MasterTahapanTender.NamaSistem = TahapanTender.NamaSistem
+		// 	WHERE TahapanTender.JobNo = '$JobNo';
+		// ")->result_object();
+
 		return $this->db->query("
-			SELECT 
-			    TahapanTender.*,
-			    MasterTahapanTender.id_SisPeng,
-			    (
-			    	SELECT COUNT(*) FROM EditTahapanTender 
-			    	WHERE EditTahapanTender.JobNo = TahapanTender.JobNo 
-			    ) AS count
-			FROM TahapanTender 
-			LEFT JOIN MasterTahapanTender ON MasterTahapanTender.NamaTahapan = TahapanTender.Tahap 
-			AND MasterTahapanTender.NamaSistem = TahapanTender.NamaSistem
-			WHERE TahapanTender.JobNo = '$JobNo';
+			select a.LedgerNo, a.JobNo, CONCAT(c.NamaSistem, ' - ', b.NamaTahapan) as Tahap, a.DrTgl, a.SpTgl, a.TimeEntry from TahapanTender as a inner join MasterTahapanTender as b on a.tahap = b.id_tahapan inner join SistemPengadaan as c
+			on b.id_SisPeng = c.id_SisPeng where a.JobNo = '$JobNo' order by a.LedgerNo desc;
 		")->result_object();
 	}
 	public function insertTahapanTender($data) {
@@ -205,10 +210,15 @@ class Job extends CI_Model {
 	}
 
 	public function getMPPbyJobNo($JobNo) {
-		$this->db->where('JobNo', $JobNo);
-		$this->db->order_by('TimeEntry', 'DESC');
-		return $this->db->get('MPP')->result_object();
+		// $this->db->where('JobNo', $JobNo);
+		// $this->db->order_by('TimeEntry', 'DESC');
+		// return $this->db->get('MPP')->result_object();
+
+		return $this->db->query("
+			select CONCAT(a.NIK, ' - ', b.Nama) as Nama, a.Posisi, a.TakeHomePay, a.TimeEntry from mpp as a inner join Karyawan as b on b.nik = a.nik where a.JobNo = '$JobNo' order by a.LedgerNo desc
+		")->result_object();		
 	}
+
 	public function insertMPP($data) {
 		return $this->db->insert('MPP', $data);
 	}

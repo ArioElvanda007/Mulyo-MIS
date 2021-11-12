@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <!-- <a href="index3.html" class="brand-link">
         <span class="brand-text font-weight-light">MIS Panel v1.0</span>
-    </a>
+    </a> -->
 
     <!-- Sidebar -->
     <div class="sidebar">

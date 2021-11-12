@@ -31,6 +31,10 @@ class Ajax extends MY_Controller {
 	public function addTahapanTender() {
 		if ($this->input->post()) {
 			$data = $this->input->post();
+			// $data['Tahap'] = $this->Tahap->post();
+			// $data['NamaSistem'] = $this->sistemPengadaan->post();
+			// $data['DrTgl'] = $this->DrTgl->post();
+			// $data['SpTgl'] = $this->SpTgl->post();
 			if ($data['LedgerNo'] <= 0) {
 				$data['TimeEntry'] = date('Y-m-d H:i:s');
 				$data['UserEntry'] = $this->session->userdata('MIS_LOGGED_NAME');

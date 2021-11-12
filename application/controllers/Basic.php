@@ -322,13 +322,14 @@ class Basic extends MY_Controller {
 		// $this->parseData['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
 
 		$data['title'] = "Data Proposal";
-		$data['posisi'] = $this->posisi;
 		$data['karyawan'] = $this->karyawan->getKaryawan_SIMPLE();
 		$data['sistemPengadaan'] = $this->tahapanTender->getMasterTahapan();
 		
 		// $this->load->model('Proposal');
         // $dataJob = $this->Proposal->data_job()->result();
 		$data['data_job'] = $this->Proposal->data_job()->result();
+		$data['dataSistemPengadaan'] = $this->Proposal->dataSistemPengadaan()->result();
+		$data['posisiKaryawan'] = $this->Proposal->posisiKaryawan()->result();
 
 		// $this->parseData['content'] = "content/basic/proposal/list";
 		// $this->load->view('Main', $this->parseData, $data);
