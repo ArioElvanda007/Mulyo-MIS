@@ -35,64 +35,130 @@
                                         foreach ($data_job as $j => $value) : ?>
                                             <tr>
                                                 <td>
-                                                    <div class="post">
-                                                        <div class="user-block">
-                                                            <a href="<?php echo base_url('Basic/proposal_edit/' . $value->JobNo); ?>">
-                                                                <img class="img-circle img-bordered-sm" src=<?=base_url('assets/'.$value->Logo)?> alt="Logo instansi">
-                                                            </a>                                                            
-
-                                                            <span class="username">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-12 col-lg-4">
+                                                            <div class="ml-4">                                                            
                                                                 <a href="<?php echo base_url('Basic/proposal_edit/' . $value->JobNo); ?>">
-                                                                    <i class="fa fa-edit mr-1"></i><?= $value->JobNo; ?>
+                                                                    <div class="text-right">
+                                                                        <?php if ($value->statusjob === 'Proposal'): ?>
+                                                                            <h4>
+                                                                            <span class="badge badge-success p-1"><?= $value->statusjob; ?></span></h4>
+                                                                        <?php else: ?>
+                                                                            <span class="badge badge-danger p-1"><?= $value->statusjob; ?></span>
+                                                                        <?php endif; ?>
+                                                                    </div>
+
+                                                                    <h3 class="text-primary">
+                                                                        <i class="fa fa-edit"></i> 
+                                                                        <?= $value->JobNo; ?>     
+                                                                    </h3>
+
+                                                                    <h4 class="text-primary"><?= $value->JobNm; ?></h4>
                                                                 </a>
-                                                            </span>
+                                                            
+                                                                <p class="text-muted"><?= $value->Deskripsi; ?></p>
+                                                                <div class="text-muted">
+                                                                    <b class="d-block text-sm">Project Information</b>
+                                                                    <ul class="mb-0 px-3 text-muted">
+                                                                        <li class="medium">Agency : <?= $value->Instansi; ?></li>
+                                                                        <li class="medium">Province : <?= $value->Provinsi; ?> - <?= $value->Lokasi; ?></li>
+                                                                        <li class="medium">Step : <?= $value->Tahap; ?></li>
+                                                                        <li class="medium">MPP : <?= $value->manPower; ?></li>
+                                                                    </ul>                
+                                                                </div>
 
-                                                            <span class="description">Shared publicly - <?= $value->TimeEntry; ?></span>
+                                                                <div class="text-right mt-1 mb-1">
+                                                                    <button type="button" class="btn bg-warning mt-1"
+                                                                        data-toggle="modal"
+                                                                        data-myjobno=<?= $value->JobNo; ?> 
+                                                                        data-target="#tahapan-tender"
+                                                                    >
+                                                                    <i class="fa fa-cubes"></i>
+                                                                        Tender stages                                                      
+                                                                    </button>                                                    
+
+                                                                    <button type="button" class="btn btn-primary mt-1"
+                                                                        data-toggle="modal"
+                                                                        data-myjobno=<?= $value->JobNo; ?> 
+                                                                        data-myinfopasarid=<?= $value->InfoPasarId; ?> 
+                                                                        data-target="#power-planning"
+                                                                    >
+                                                                    <i class="fa fa-users"></i>
+                                                                        MPP                                                      
+                                                                    </button>                                                    
+                                                                </div>
+
+                                                                <div class="text-muted">
+                                                                    <b class="d-block text-sm">Participant Information</b>
+                                                                    <ul class="mb-0 px-3 text-muted">
+                                                                        <li class="medium">Type : <?= $value->type_tender; ?></li>
+                                                                        <li class="medium">Work unit : <?= $value->SatuanKerja; ?></li>
+                                                                        <li class="medium">Work type : <?= $value->TipePekerjaan; ?></li>
+                                                                        <li class="medium">Funds : <?= $value->SDDN; ?></li>
+                                                                        <li class="medium">Fiscal year : <?= $value->TahunAnggaran; ?></li>
+                                                                        <li class="medium">Opportunity : <?= $value->Peluang; ?> %</li>
+                                                                        <li class="medium">HPS : <?= number_format($value->HPS); ?></li>
+                                                                        <li class="medium">Plan : <?= $value->TglKontrak; ?></li>
+                                                                        <li class="medium">System : <?= $value->SistemKontrak; ?></li>
+                                                                    </ul>                
+                                                                </div>
+
+                                                                <b class="d-block text-sm text-muted">Project files</b>
+                                                                <ul class="list-unstyled">
+                                                                    <li>
+                                                                        <a href="<?=base_url('assets/files/jobs/'.$value->HasilPembukaan)?>" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> <?= $value->HasilPembukaan; ?>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="text-right mt-1 mb-1">
+                                                                    <button type="button" class="btn btn-success mt-1"
+                                                                        data-toggle="modal"
+                                                                    >
+                                                                        <i class="fa fa-trophy"></i>
+                                                                        Winner                                                      
+                                                                    </button>                                                    
+
+                                                                    <button type="button" class="btn btn-danger mt-1"
+                                                                        data-toggle="modal"
+                                                                    >
+                                                                        <i class="fa fa-times"></i>
+                                                                        Failed                                                      
+                                                                    </button>   
+                                                                </div>
+                                                            </div>
                                                         </div>
 
-                                                        <div>
-                                                            <a href="<?php echo base_url('Basic/proposal_edit/' . $value->JobNo); ?>">
-                                                                <h2 class="lead px-5">
-                                                                    <i class="fa fa-edit mr-1"></i>
-                                                                    <b>Project : <?= $value->JobNo; ?> ~ <?= $value->JobNm; ?></b>
-                                                                </h2>
-                                                            </a>
+                                                        <div class="col-12 col-md-12 col-lg-8">
+                                                            <div class="ml-4">
+                                                                
+                                                                <h4>List of Participants</h4>
+                                                                <div class="post">
+                                                                    <div class="user-block">
+                                                                        <img class="img-circle img-bordered-sm" src="../../dist/img/    user1-128x128.jpg" alt="user image">
+                                                                        <span class="username">
+                                                                            <a href="#">Jonathan Burke Jr.</a>
+                                                                        </span>
+                                                                        <span class="description">Shared publicly - 7:45 PM today</span>
+                                                                    </div>
+                                                                    <!-- /.user-block -->
+                                                                    <p>
+                                                                        Lorem ipsum represents a long-held tradition for designers,
+                                                                        typographers and the like. Some people hate it and argue for
+                                                                        its demise, but others ignore.
+                                                                    </p>
 
-                                                            <ul class="mb-0 text-muted px-5 ml-4">
-                                                                <li class="medium">Agency : <?= $value->Instansi; ?></li>
-                                                                <li class="medium">Province : <?= $value->Provinsi; ?> - <?= $value->Lokasi; ?></li>
-                                                                <li class="medium">HPS : <?= number_format($value->HPS); ?></li>
-                                                                <li class="medium">Step : <?= $value->Tahap; ?></li>
-                                                                <li class="medium">MPP : <?= $value->manPower; ?></li>
-                                                                <li class="medium">Description : <?= $value->Deskripsi; ?></li>
-                                                            </ul>
+                                                                    <p>
+                                                                        <a href="#" class="link-black text-sm">
+                                                                            <i class="fas fa-link mr-1"></i> Demo File 1 v2
+                                                                        </a>
+                                                                    </p>
+                                                                </div>
 
-                                                            <p class="px-5">
-                                                                <a href="<?=base_url('assets/files/jobs/'.$value->HasilPembukaan)?>"  target="_blank"><i class="fas fa-link mr-1"></i>Opening result file : <?= $value->HasilPembukaan; ?></a>
-                                                            </p>                                                            
+                                                            </div>
                                                         </div>
 
-                                                        <div class="px-5">
-                                                            <button type="button" class="btn bg-teal"
-                                                                data-toggle="modal"
-                                                                data-myjobno=<?= $value->JobNo; ?> 
-                                                                data-target="#tahapan-tender"
-                                                            >
-                                                                <i class="fa fa-cubes"></i>
-                                                                Tender stages                                                      
-                                                            </button>                                                    
-
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-toggle="modal"
-                                                                data-myjobno=<?= $value->JobNo; ?> 
-                                                                data-myinfopasarid=<?= $value->InfoPasarId; ?> 
-                                                                data-target="#power-planning"
-                                                            >
-                                                                <i class="fa fa-users"></i>
-                                                                MPP                                                      
-                                                            </button>                                                    
-                                                        </div>
                                                     </div>
+
                                                 </td>
                                                 
                                             </tr>
@@ -244,7 +310,7 @@
                 <br />
                 <p style="float: right;margin: 0;font-size: 20px">Revisi: <span id="totalTahapanEdited"></span></p>
                 <legend>
-                    List Tahapan Tender
+                    List Man Power Planning
                 </legend>
                 <br />
                 <table id="datatable3" class="table table-bordered table-hover">

@@ -20,9 +20,17 @@ class Proposal extends CI_Model {
             case
                 when ax.Logo is null then 'images/camera.png'
                 else REPLACE(ax.Logo, '~/Images', 'images')
-            end as Logo, ax.TimeEntry, ax.Deskripsi, ax.Lokasi
+            end as Logo, ax.TimeEntry, ax.Deskripsi, ax.Lokasi, ax.statusjob,
+            case
+                when ax.KSO = '0' then 'Tunggal'
+                else 'KSO'
+            end type_tender, bx.SatuanKerja, bx.SDDN, bx.TipePekerjaan, ax.TahunAnggaran, ax.Peluang, ax.TglKontrak, ax.SistemKontrak
             from
-            (SELECT * From Job WHERE statusjob = 'Proposal' AND company = 'PRA') as ax ORDER BY ax.JobNo DESC  
+            (SELECT * From Job WHERE statusjob in ('Proposal','Gagal') AND company = 'PRA') as ax
+            inner join
+            (select * from InfoPasar) as bx on bx.jobNo = ax.JobNo
+            ORDER BY ax.JobNo DESC 
+
         ");
         return $query;        
     }	
