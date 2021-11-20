@@ -36,22 +36,27 @@
                                             <tr>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col-12 col-md-12 col-lg-4">
-                                                            <div class="ml-4">                                                            
+                                                        <div class="col-12 col-md-12 col-lg-8">
+                                                            <div class="ml-4">  
+                                                            
                                                                 <a href="<?php echo base_url('Basic/proposal_edit/' . $value->JobNo); ?>">
-                                                                    <div class="text-right">
-                                                                        <?php if ($value->statusjob === 'Proposal'): ?>
-                                                                            <h4>
-                                                                            <span class="badge badge-success p-1"><?= $value->statusjob; ?></span></h4>
-                                                                        <?php else: ?>
-                                                                            <span class="badge badge-danger p-1"><?= $value->statusjob; ?></span>
-                                                                        <?php endif; ?>
-                                                                    </div>
-
-                                                                    <h3 class="text-primary">
-                                                                        <i class="fa fa-edit"></i> 
-                                                                        <?= $value->JobNo; ?>     
-                                                                    </h3>
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <h3 class="text-primary">
+                                                                                <i class="fa fa-edit"></i> 
+                                                                                <?= $value->JobNo; ?>     
+                                                                            </h3>                                                                    
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <div class="float-right">
+                                                                                <?php if ($value->statusjob === 'Proposal'): ?>
+                                                                                    <h4><span class="badge badge-success p-1"><?= $value->statusjob; ?></span></h4>
+                                                                                <?php else: ?>
+                                                                                    <h4><span class="badge badge-danger p-1"><?= $value->statusjob; ?></span></h4>
+                                                                                <?php endif; ?>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>                                                            
 
                                                                     <h4 class="text-primary"><?= $value->JobNm; ?></h4>
                                                                 </a>
@@ -67,7 +72,7 @@
                                                                     </ul>                
                                                                 </div>
 
-                                                                <div class="text-right mt-1 mb-1">
+                                                                <div class="text-left mt-1 mb-1">
                                                                     <button type="button" class="btn bg-warning mt-1"
                                                                         data-toggle="modal"
                                                                         data-myjobno=<?= $value->JobNo; ?> 
@@ -88,7 +93,7 @@
                                                                     </button>                                                    
                                                                 </div>
 
-                                                                <div class="text-muted">
+                                                                <!-- <div class="text-muted">
                                                                     <b class="d-block text-sm">Participant Information</b>
                                                                     <ul class="mb-0 px-3 text-muted">
                                                                         <li class="medium">Type : <?= $value->type_tender; ?></li>
@@ -124,34 +129,105 @@
                                                                         <i class="fa fa-times"></i>
                                                                         Failed                                                      
                                                                     </button>   
-                                                                </div>
+                                                                </div> -->
+
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-md-12 col-lg-8">
+                                                        <div class="col-12 col-md-12 col-lg-4">
                                                             <div class="ml-4">
-                                                                
-                                                                <h4>List of Participants</h4>
+                                                                <!-- <h4>List of Participants</h4>
+
                                                                 <div class="post">
+                                                                    <span class="badge badge-success p-1 mb-1">Leader 1</span>
                                                                     <div class="user-block">
-                                                                        <img class="img-circle img-bordered-sm" src="../../dist/img/    user1-128x128.jpg" alt="user image">
+                                                                        <img class="img-circle img-bordered-sm" src="../../dist/img/    user1-128x128.jpg" alt="image">
                                                                         <span class="username">
                                                                             <a href="#">Jonathan Burke Jr.</a>
                                                                         </span>
                                                                         <span class="description">Shared publicly - 7:45 PM today</span>
                                                                     </div>
-                                                                    <!-- /.user-block -->
-                                                                    <p>
-                                                                        Lorem ipsum represents a long-held tradition for designers,
-                                                                        typographers and the like. Some people hate it and argue for
-                                                                        its demise, but others ignore.
-                                                                    </p>
 
-                                                                    <p>
-                                                                        <a href="#" class="link-black text-sm">
-                                                                            <i class="fas fa-link mr-1"></i> Demo File 1 v2
+                                                                    <div class="row">
+                                                                        <div class="col-4">
+                                                                            <div class="form-group">
+                                                                                <label>Gross (Rp)</label>
+                                                                                <div>1,000,000,000</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <div class="form-group">
+                                                                                <label>Exclude VAT</label>
+                                                                                <div>1,000,000,000</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <div class="form-group">
+                                                                                <label>Portion</label>
+                                                                                <div>50 %</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="box-body table-responsive no-padding ml-2">
+                                                                            <table class="table table-hover" border="1" cellspacing="1" width="100%">
+                                                                                <tr style="background-color: #ADD8E6;">
+                                                                                    <th>No</th>
+                                                                                    <th>Job No</th>
+                                                                                    <th>Job Name</th>
+                                                                                </tr>
+
+                                                                                <tr>
+                                                                                    <td>1</td>
+                                                                                    <td>aa</td>
+                                                                                    <td>bb</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> -->
+
+                                                                <div class="text-muted">
+                                                                    <b class="d-block text-sm">Participant Information</b>
+                                                                    <ul class="mb-0 px-3 text-muted">
+                                                                        <li class="medium">Type : <?= $value->type_tender; ?></li>
+                                                                        <li class="medium">Work unit : <?= $value->SatuanKerja; ?></li>
+                                                                        <li class="medium">Work type : <?= $value->TipePekerjaan; ?></li>
+                                                                        <li class="medium">Funds : <?= $value->SDDN; ?></li>
+                                                                        <li class="medium">Fiscal year : <?= $value->TahunAnggaran; ?></li>
+                                                                        <li class="medium">Opportunity : <?= $value->Peluang; ?> %</li>
+                                                                        <li class="medium">HPS : <?= number_format($value->HPS); ?></li>
+                                                                        <li class="medium">Plan : <?= $value->TglKontrak; ?></li>
+                                                                        <li class="medium">System : <?= $value->SistemKontrak; ?></li>
+                                                                    </ul>                
+                                                                </div>
+
+                                                                <b class="d-block text-sm text-muted">Project files</b>
+                                                                <ul class="list-unstyled">
+                                                                    <li>
+                                                                        <a href="<?=base_url('assets/files/jobs/'.$value->HasilPembukaan)?>" target="_blank" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> <?= $value->HasilPembukaan; ?>
                                                                         </a>
-                                                                    </p>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="text-left mt-1 mb-1">
+                                                                    <button type="button" class="btn btn-success mt-1"
+                                                                        data-toggle="modal"
+                                                                        data-myjobno=<?= $value->JobNo; ?> 
+                                                                        data-target="#update-winner"
+                                                                    >
+                                                                        <i class="fa fa-trophy"></i>
+                                                                        Winner                                                      
+                                                                    </button>                                                    
+
+                                                                    <button type="button" class="btn btn-danger mt-1"
+                                                                        data-myjobno=<?= $value->JobNo; ?> 
+                                                                        data-target="#update-failed"
+                                                                        data-toggle="modal"
+                                                                    >
+                                                                        <i class="fa fa-times"></i>
+                                                                        Failed                                                      
+                                                                    </button>   
                                                                 </div>
 
                                                             </div>
@@ -175,6 +251,7 @@
 		</div>
 	</div>
 </section>
+
 <!-- MODALS tahapan-tender-->
 <div class="modal fade" id="tahapan-tender">
     <div class="modal-dialog modal-lg">
@@ -333,6 +410,82 @@
 </div>
 <!-- /.modal -->
 
+<!-- MODALS update-winner-->
+<div class="modal fade" id="update-winner">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Winner Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= site_url('Basic/proposal_winner') ?>" method="POST">
+                    <input type="hidden" name="JobNo" id="JobNo">
+                    <div class="form-group">
+                        <label>Pilih Pemenang</label>
+                        <select class="form-control" name="company">
+                            <option value="MDH">MINARTA</option>
+                            <option value="KIP">KELMAN INFRA</option>
+                            <option value="DLL">DLL</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Batal</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->    
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- MODALS update-failed-->
+<div class="modal fade" id="update-failed">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Konfirmasi Untuk gagal Tender</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= site_url('Basic/proposal_failure') ?>" method="POST">
+                    <input type="hidden" name="JobNo" id="JobNo">
+                    <div class="form-group">
+                        <label>Alasan Gugur</label>
+                        <textarea class="form-control" name="AlasanGugur"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Pemenang Lelang</label>
+                        <input type="text" class="form-control" name="PemenangLelang">
+                    </div>
+                    <div class="form-group">
+                        <label>Penawaran Lelang</label>
+                        <input type="text" class="form-control" name="PenawaranPemenang" onkeyup="toDecimal(this)">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Batal</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Simpan</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+
+
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- code sandi -->
 <div class="modal fade" id="winner">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -558,7 +711,7 @@
 <!-- END -->
 
 <script type="text/javascript">          
-  $('#tahapan-tender').on('show.bs.modal', function(event){// #edit_akses adalah id yang ada di form modal edit
+  $('#tahapan-tender').on('show.bs.modal', function(event){
     var button = $(event.relatedTarget)
     var val_myjobno = button.data('myjobno')// myJobNo adalah data-myJobNo yang ada di form modal edit
 
@@ -620,8 +773,30 @@
         }
     })
 
-  })  
+  })
+  
+  $('#update-winner').on('show.bs.modal', function(event){
+    var button = $(event.relatedTarget)
+    var val_myjobno = button.data('myjobno')// myJobNo adalah data-myJobNo yang ada di form modal edit
 
+    // mengisi value yang ada di div modal-body
+    var modal = $(this)
+    // modal-body adalah <div class="modal-body"> yang ada di form modal edit
+    modal.find('.modal-body #JobNo').val(val_myjobno);// #id adalah id dari input type yang ada di form modal edit
+  })
+
+  $('#update-failed').on('show.bs.modal', function(event){
+    var button = $(event.relatedTarget)
+    var val_myjobno = button.data('myjobno')// myJobNo adalah data-myJobNo yang ada di form modal edit
+
+    // mengisi value yang ada di div modal-body
+    var modal = $(this)
+    // modal-body adalah <div class="modal-body"> yang ada di form modal edit
+    modal.find('.modal-body #JobNo').val(val_myjobno);// #id adalah id dari input type yang ada di form modal edit
+  })  
+  
+
+    // code sandi
     $(function() {
         genTable();
     })
