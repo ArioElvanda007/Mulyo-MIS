@@ -30,7 +30,6 @@ class Proposal extends CI_Model {
             inner join
             (select * from InfoPasar) as bx on bx.jobNo = ax.JobNo
             ORDER BY ax.JobNo DESC 
-
         ");
         return $query;        
     }	
